@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: mahek-decorator-frontend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    plan: free
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        sync: false
+    routes:
+      - path: /
+        matchType: prefix
+
+  - type: web
+    name: mahek-decorator-backend
+    env: node
+    buildCommand: npm install --prefix backend
+    startCommand: node backend/server.js
+    plan: free
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+    routes:
+      - path: /api
+        matchType: prefix

@@ -1,6 +1,7 @@
 'use client'
 
-import { useRef } from 'react'
+import { motion } from 'framer-motion'
+import CONFIG, { whatsappUrl } from '@/lib/config'
 
 const decorations = [
   {
@@ -76,10 +77,13 @@ export default function FeaturedDecorations() {
         {/* Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {decorations.map((item, i) => (
-            <div
+            <motion.div
               key={i}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="glass-card rounded-2xl overflow-hidden group cursor-pointer"
-              style={{ animationDelay: `${i * 0.1}s` }}
             >
               {/* Image */}
               <div className="relative h-[220px] overflow-hidden">
@@ -121,7 +125,7 @@ export default function FeaturedDecorations() {
                 {/* Actions */}
                 <div className="flex gap-3">
                   <a
-                    href={`https://wa.me/919876543210?text=Hi!%20I'm%20interested%20in%20${encodeURIComponent(item.title)}%20(${encodeURIComponent(item.price)}).`}
+                    href={whatsappUrl(`Hi! I'm interested in ${item.title} (${item.price}).`)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 px-4 py-2.5 rounded-full btn-gold text-xs text-center no-underline inline-flex items-center justify-center gap-1.5"
@@ -130,7 +134,7 @@ export default function FeaturedDecorations() {
                     Book Now
                   </a>
                   <a
-                    href={`https://wa.me/919876543210?text=Hi!%20Can%20we%20negotiate%20the%20price%20for%20${encodeURIComponent(item.title)}?`}
+                    href={whatsappUrl(`Hi! Can we negotiate the price for ${item.title}?`)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-4 py-2.5 rounded-full btn-outline text-xs no-underline inline-flex items-center gap-1.5"
@@ -139,7 +143,7 @@ export default function FeaturedDecorations() {
                   </a>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 

@@ -20,6 +20,8 @@ app.get('/api/health', (req, res) => {
 app.use('/api/bookings', require('./routes/bookings'))
 app.use('/api/contacts', require('./routes/contacts'))
 
-app.listen(PORT, () => {
-  console.log(`MAHEK DECORATOR API running on port ${PORT}`)
+app.listen(PORT, '0.0.0.0', () => {
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`MAHEK DECORATOR API running on port ${PORT}`)
+  }
 })

@@ -1,128 +1,130 @@
 'use client'
 
-import { useState } from 'react'
+import { motion } from 'framer-motion'
+import ContactCard from './ContactCard'
+import ContactForm from './ContactForm'
+import CONFIG, { whatsappUrl, telUrl, mailUrl } from '@/lib/config'
 
 export default function Contact() {
-  const [form, setForm] = useState({
-    name: '', phone: '', eventDate: '', decorationType: '',
-    budget: '', location: '', message: '',
+  const fadeUp = (delay = 0) => ({
+    initial: { opacity: 0, y: 40 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: '-50px' },
+    transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] },
   })
-  const [submitted, setSubmitted] = useState(false)
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const whatsappMsg = encodeURIComponent(
-      `*New Booking Inquiry*%0A%0A` +
-      `Name: ${form.name}%0A` +
-      `Phone: ${form.phone}%0A` +
-      `Event Date: ${form.eventDate}%0A` +
-      `Decoration Type: ${form.decorationType}%0A` +
-      `Budget: ${form.budget}%0A` +
-      `Location: ${form.location}%0A` +
-      `Message: ${form.message}`
-    )
-    window.open(`https://wa.me/919876543210?text=${whatsappMsg}`, '_blank')
-    setSubmitted(true)
-    setForm({ name: '', phone: '', eventDate: '', decorationType: '', budget: '', location: '', message: '' })
-    setTimeout(() => setSubmitted(false), 5000)
-  }
+  const cards = [
+    {
+      icon: 'phone',
+      title: 'Call Us',
+      lines: [CONFIG.phone.display, CONFIG.phone.display],
+      href: telUrl(CONFIG.phone.primary),
+      label: CONFIG.phone.display,
+    },
+    {
+      icon: 'whatsapp',
+      title: 'WhatsApp',
+      lines: [CONFIG.whatsapp.display],
+      href: whatsappUrl(CONFIG.whatsappMessages.general),
+      label: 'Chat on WhatsApp',
+    },
+    {
+      icon: 'email',
+      title: 'Email',
+      lines: [CONFIG.email.business, CONFIG.email.support],
+      href: mailUrl(CONFIG.email.business, 'Decoration Inquiry', 'Hi Mahek Decorator!'),
+      label: 'Send Email',
+    },
+    {
+      icon: 'location',
+      title: 'Our Office',
+      lines: ['Opp. Saras Baug Road', 'Municipal Colony, Pune'],
+      href: CONFIG.googleMaps.url,
+      label: 'View on Map',
+    },
+    {
+      icon: 'clock',
+      title: 'Working Hours',
+      lines: [CONFIG.workingHours.display, CONFIG.workingHours.note],
+    },
+  ]
 
   return (
-    <section id="contact" className="section-padding relative bg-[#0b0b0b]">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.03),transparent_60%)]" />
+    <section id="contact" className="relative py-28 sm:py-36 overflow-hidden bg-[#0b0b0b]">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_40%,rgba(139,92,246,0.04),transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_60%,rgba(212,175,55,0.03),transparent_50%)]" />
 
-      <div className="container-custom relative z-10">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-[#d4af37] tracking-[0.15em] uppercase mb-5 font-medium border-[rgba(212,175,55,0.15)]">
-            Get In Touch
-          </div>
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-[-0.03em] text-white mb-4">
-            Book Your <span className="gold-gradient">Celebration</span>
+      <div className="relative z-10 max-w-[1280px] mx-auto px-6">
+        {/* Section Header */}
+        <motion.div {...fadeUp(0)} className="text-center mb-16">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-[#d4af37] tracking-[0.15em] uppercase mb-6 font-medium border-[rgba(212,175,55,0.15)]">
+            Get in Touch
+          </span>
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold text-white mb-5 tracking-[-0.02em]">
+            Let&apos;s Plan Your{' '}
+            <span className="gold-gradient">Perfect Event</span>
           </h2>
-          <p className="text-[rgba(255,255,255,0.5)] text-base max-w-[500px] mx-auto font-light">
-            Tell us about your event and we&apos;ll create the perfect decoration for you.
+          <p className="text-[rgba(255,255,255,0.5)] text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+            Ready to transform your event? Reach out and our team will craft a stunning balloon decoration experience tailored just for you.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="max-w-3xl mx-auto">
-          {submitted && (
-            <div className="mb-6 px-6 py-4 rounded-2xl glass border-[rgba(212,175,55,0.2)] text-center">
-              <p className="text-[#d4af37] text-sm font-medium">Thank you! Your inquiry has been sent via WhatsApp. We&apos;ll contact you shortly.</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+          {/* LEFT CARDS */}
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {cards.slice(0, 2).map((card, i) => (
+                <ContactCard key={card.title} {...card} delay={i * 0.1} />
+              ))}
             </div>
-          )}
+            <ContactCard {...cards[2]} delay={0.2} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {cards.slice(3).map((card, i) => (
+                <ContactCard key={card.title} {...card} delay={0.3 + i * 0.1} />
+              ))}
+            </div>
 
-          <form onSubmit={handleSubmit} className="glass-card rounded-3xl p-8 sm:p-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <InputField label="Full Name" name="name" value={form.name} onChange={handleChange} required />
-              <InputField label="Phone Number" name="phone" type="tel" value={form.phone} onChange={handleChange} required />
-              <InputField label="Event Date" name="eventDate" type="date" value={form.eventDate} onChange={handleChange} required />
-              <InputField label="Decoration Type" name="decorationType" placeholder="e.g. Wedding, Birthday, Proposal" value={form.decorationType} onChange={handleChange} required />
-              <InputField label="Budget Range" name="budget" placeholder="e.g. ₹5,000 – ₹10,000" value={form.budget} onChange={handleChange} required />
-              <InputField label="Location" name="location" placeholder="e.g. Pune, Hinjewadi" value={form.location} onChange={handleChange} required />
-            </div>
-            <div className="mt-5">
-              <label className="block text-xs text-[rgba(255,255,255,0.4)] mb-2 tracking-wide uppercase">Message (Optional)</label>
-              <textarea
-                name="message"
-                value={form.message}
-                onChange={handleChange}
-                rows={3}
-                placeholder="Tell us more about your event..."
-                className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-white text-sm placeholder-[rgba(255,255,255,0.25)] outline-none transition-all duration-300 focus:border-[rgba(212,175,55,0.3)] focus:bg-[rgba(255,255,255,0.06)] resize-none"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full mt-6 px-8 py-3.5 rounded-full btn-gold text-sm font-semibold inline-flex items-center justify-center gap-2"
+            {/* Service Area */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="p-5 rounded-2xl glass border border-[rgba(212,175,55,0.1)]"
             >
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
-              Send Inquiry via WhatsApp
-            </button>
-          </form>
-
-          {/* Contact Info */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-8">
-            {[
-              { label: 'Call Us', value: '+91 98765 43210', href: 'tel:+919876543210', icon: '📞' },
-              { label: 'Email Us', value: 'hello@mahekdecorators.com', href: 'mailto:hello@mahekdecorators.com', icon: '✉️' },
-              { label: 'WhatsApp', value: '+91 98765 43210', href: 'https://wa.me/919876543210', icon: '💬' },
-            ].map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass-card rounded-2xl p-5 text-center no-underline group"
-              >
-                <div className="text-2xl mb-2">{item.icon}</div>
-                <div className="text-xs text-[rgba(255,255,255,0.4)] mb-1 tracking-wide uppercase">{item.label}</div>
-                <div className="text-sm text-white font-medium group-hover:text-[#d4af37] transition-colors">{item.value}</div>
-              </a>
-            ))}
+              <div className="flex items-center gap-2 mb-2">
+                <svg className="w-4 h-4 text-[#d4af37]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                </svg>
+                <span className="text-xs font-medium tracking-[0.1em] uppercase text-[rgba(255,255,255,0.3)]">Service Area</span>
+              </div>
+              <p className="text-sm text-[rgba(255,255,255,0.6)] leading-relaxed">{CONFIG.serviceArea.description}</p>
+            </motion.div>
           </div>
+
+          {/* RIGHT FORM */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="rounded-3xl glass border border-[rgba(255,255,255,0.06)] p-6 sm:p-8"
+          >
+            <div className="flex items-center gap-3 mb-6 pb-6 border-b border-[rgba(255,255,255,0.06)]">
+              <div className="w-10 h-10 rounded-xl bg-[rgba(212,175,55,0.1)] flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-[#d4af37]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-white font-display font-semibold text-lg">Quick Inquiry</h3>
+                <p className="text-[rgba(255,255,255,0.35)] text-xs">Fill in the details and we&apos;ll get back to you</p>
+              </div>
+            </div>
+            <ContactForm />
+          </motion.div>
         </div>
       </div>
     </section>
-  )
-}
-
-function InputField({ label, name, type = 'text', placeholder, value, onChange, required }) {
-  return (
-    <div>
-      <label className="block text-xs text-[rgba(255,255,255,0.4)] mb-2 tracking-wide uppercase">{label}</label>
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        required={required}
-        className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-white text-sm placeholder-[rgba(255,255,255,0.25)] outline-none transition-all duration-300 focus:border-[rgba(212,175,55,0.3)] focus:bg-[rgba(255,255,255,0.06)]"
-      />
-    </div>
   )
 }

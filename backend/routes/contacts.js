@@ -28,7 +28,7 @@ router.post('/', (req, res) => {
 
   contacts.push(contact)
 
-  console.log(`New contact from ${name} (${phone})`)
+  // Contact inquiry logged
 
   res.status(201).json({ success: true, contact })
 })

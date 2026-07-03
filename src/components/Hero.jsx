@@ -1,259 +1,258 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { motion } from 'framer-motion'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import CONFIG, { whatsappUrl } from '@/lib/config'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export default function Hero() {
-  const containerRef = useRef(null)
-  const mouseRef = useRef({ x: 0, y: 0 })
-  const frameRef = useRef(null)
+  const sectionRef = useRef(null)
+  const bgTextRef = useRef(null)
+  const balloonRef = useRef(null)
+  const overlayRef = useRef(null)
+  const ctaRef = useRef(null)
+  const particlesRef = useRef([])
+  const ribbonRef = useRef(null)
+  const timeline = useRef(null)
 
   useEffect(() => {
-    const container = containerRef.current
-    if (!container) return
+    const section = sectionRef.current
+    const bgText = bgTextRef.current
+    const balloon = balloonRef.current
+    const overlay = overlayRef.current
+    const cta = ctaRef.current
+    const particles = particlesRef.current
+    const ribbon = ribbonRef.current
 
-    const handleMouse = (e) => {
-      const rect = container.getBoundingClientRect()
-      mouseRef.current = {
-        x: ((e.clientX - rect.left) / rect.width - 0.5) * 2,
-        y: ((e.clientY - rect.top) / rect.height - 0.5) * 2,
-      }
-    }
+    if (!section) return
 
-    container.addEventListener('mousemove', handleMouse, { passive: true })
-
-    // Animate floating elements via CSS transforms
-    const balloons = container.querySelectorAll('.float-balloon')
-    const particles = container.querySelectorAll('.particle')
-    const lights = container.querySelectorAll('.ambient-light')
-
-    let startTime = Date.now()
-
-    const animate = () => {
-      const t = (Date.now() - startTime) / 1000
-      const mx = mouseRef.current.x
-      const my = mouseRef.current.y
-
-      balloons.forEach((el, i) => {
-        const speed = 0.3 + i * 0.1
-        const offset = i * 1.5
-        const x = Math.sin(t * speed + offset) * 6 + mx * 4
-        const y = Math.sin(t * speed * 0.7 + offset + 1) * 8 + my * 3
-        const rot = Math.sin(t * speed * 0.5 + offset) * 3
-        el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rot}deg)`
+    const ctx = gsap.context(() => {
+      // Master timeline scrubbed by scroll
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
       })
 
+      // 0%-20%: Dark, particles move slowly
+      tl.to(overlay, { opacity: 0.3, duration: 20, ease: 'power1.out' }, 0)
+      tl.fromTo(
+        particles,
+        { y: 0, opacity: 0 },
+        { y: -30, opacity: 0.6, duration: 20, ease: 'power1.out', stagger: 0.02 },
+        0
+      )
+
+      // 20%-40%: Balloon starts forming, glow increases
+      tl.fromTo(
+        balloon,
+        { scale: 0.6, opacity: 0.2, filter: 'blur(12px)' },
+        { scale: 1, opacity: 1, filter: 'blur(0px)', duration: 20, ease: 'power2.out' },
+        20
+      )
+      tl.to(
+        balloon,
+        { boxShadow: '0 0 80px rgba(212,175,55,0.3), 0 0 160px rgba(139,92,246,0.15)', duration: 20, ease: 'power1.out' },
+        20
+      )
+
+      // 40%-60%: Ribbon particles rotate, BG text fades in
+      tl.to(ribbon, { rotation: 180, duration: 20, ease: 'none' }, 40)
+      tl.fromTo(
+        bgText,
+        { opacity: 0, y: 60, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 20, ease: 'power2.out' },
+        40
+      )
+
+      // 60%-80%: Camera zoom effect, depth
+      tl.to(section, { scale: 1.02, duration: 20, ease: 'power1.out' }, 60)
+      tl.to(balloon, { scale: 1.05, duration: 20, ease: 'power1.out' }, 60)
+      tl.to(bgText, { letterSpacing: '0.02em', duration: 20, ease: 'power1.out' }, 60)
+
+      // 80%-100%: Gentle float, lock in place
+      tl.to(balloon, { y: -8, duration: 10, ease: 'sine.inOut', yoyo: true, repeat: -1 }, 80)
+      tl.to(particles, { opacity: 0.8, duration: 20, ease: 'power1.out' }, 80)
+      tl.to(cta, { opacity: 1, y: 0, duration: 10, ease: 'back.out(1.7)' }, 85)
+    }, section)
+
+    return () => ctx.revert()
+  }, [])
+
+  // Individual particle animation with rAF for GPU perf
+  useEffect(() => {
+    const particles = particlesRef.current
+    if (!particles.length) return
+
+    let animFrame
+    let start = Date.now()
+
+    const tick = () => {
+      const t = (Date.now() - start) / 1000
       particles.forEach((el, i) => {
-        const speed = 0.15 + (i % 5) * 0.05
-        const offset = i * 0.7
-        const x = Math.sin(t * speed + offset) * (10 + (i % 3) * 5) + mx * (5 + (i % 3) * 2)
-        const y = Math.sin(t * speed * 0.6 + offset + 2) * (12 + (i % 3) * 5) + my * (4 + (i % 3) * 2)
-        const scale = 0.6 + Math.sin(t * speed + offset) * 0.4
-        el.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`
-        el.style.opacity = 0.15 + Math.sin(t * speed + offset + 1) * 0.1
+        if (!el) return
+        const speed = 0.2 + (i % 5) * 0.04
+        const offset = i * 0.8
+        const x = Math.sin(t * speed + offset) * 12
+        const y = Math.sin(t * speed * 0.6 + offset + 1.5) * 8
+        el.style.transform = `translate3d(${x}px, ${y}px, 0)`
       })
-
-      lights.forEach((el) => {
-        const glow = 0.3 + Math.sin(t * 0.5 + parseFloat(el.dataset.offset || 0)) * 0.2
-        el.style.opacity = glow
-      })
-
-      frameRef.current = requestAnimationFrame(animate)
+      animFrame = requestAnimationFrame(tick)
     }
-
-    frameRef.current = requestAnimationFrame(animate)
-
-    return () => {
-      container.removeEventListener('mousemove', handleMouse)
-      if (frameRef.current) cancelAnimationFrame(frameRef.current)
-    }
+    animFrame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(animFrame)
   }, [])
 
   return (
-    <section id="hero" className="relative min-h-screen overflow-hidden bg-[#0b0b0b]" ref={containerRef}>
-      {/* Background gradient layers */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(139,92,246,0.08),transparent_60%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(212,175,55,0.06),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_80%,rgba(139,92,246,0.05),transparent_50%)]" />
+    <section
+      ref={sectionRef}
+      id="hero"
+      className="relative min-h-[200vh] bg-[#0b0b0b] overflow-hidden"
+    >
+      {/* Sticky viewport container */}
+      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
+        {/* Background gradients */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(139,92,246,0.08),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(212,175,55,0.05),transparent_50%)]" />
 
-      {/* Particle layer */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {/* Overlay for dark start */}
+        <div ref={overlayRef} className="absolute inset-0 bg-black z-10 opacity-0 pointer-events-none" />
+
+        {/* Large Background Typography */}
+        <div
+          ref={bgTextRef}
+          className="absolute inset-0 flex flex-col items-center justify-center z-[2] opacity-0 pointer-events-none select-none"
+        >
+          <span className="font-display font-bold text-[clamp(4rem,20vw,18rem)] leading-[0.85] tracking-[-0.06em] text-white/5 gold-gradient">
+            MAHEK
+          </span>
+          <span className="font-display font-bold text-[clamp(3rem,15vw,14rem)] leading-[0.85] tracking-[-0.04em] text-white/5 gold-gradient">
+            DECORATOR
+          </span>
+        </div>
+
+        {/* Central Glass Balloon Sculpture */}
+        <div className="absolute inset-0 flex items-center justify-center z-[3]">
           <div
-            key={`p-${i}`}
-            className="particle absolute w-1 h-1 rounded-full"
-            style={{
-              background: i % 3 === 0 ? '#d4af37' : i % 3 === 1 ? '#8b5cf6' : 'rgba(255,255,255,0.4)',
-              left: `${5 + (i * 17) % 90}%`,
-              top: `${10 + (i * 23) % 80}%`,
-              boxShadow: i % 3 === 0 ? '0 0 6px rgba(212,175,55,0.3)' : i % 3 === 1 ? '0 0 6px rgba(139,92,246,0.3)' : 'none',
-            }}
-          />
-        ))}
-      </div>
+            ref={balloonRef}
+            className="relative w-[220px] h-[280px] sm:w-[280px] sm:h-[360px] md:w-[340px] md:h-[440px] lg:w-[400px] lg:h-[520px]"
+          >
+            {/* Main balloon body */}
+            <div className="absolute inset-0 rounded-[50%_50%_50%_50%/40%_40%_60%_60%] bg-gradient-to-b from-[rgba(212,175,55,0.25)] via-[rgba(139,92,246,0.15)] to-[rgba(212,175,55,0.08)] border border-[rgba(212,175,55,0.15)] shadow-[inset_-40px_-20px_60px_rgba(0,0,0,0.3),0_0_80px_rgba(212,175,55,0.1),0_0_160px_rgba(139,92,246,0.08)] backdrop-blur-[2px] overflow-hidden">
+              {/* Glass reflections */}
+              <div className="absolute top-[15%] left-[20%] w-[35%] h-[25%] rounded-full bg-gradient-to-br from-white/10 to-transparent blur-sm" />
+              <div className="absolute top-[30%] left-[15%] w-[15%] h-[35%] rounded-full bg-gradient-to-b from-white/5 to-transparent blur-[6px]" />
+              <div className="absolute bottom-[20%] right-[15%] w-[20%] h-[15%] rounded-full bg-gradient-to-tl from-[rgba(212,175,55,0.1)] to-transparent blur-sm" />
+              {/* Inner glow */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.08),transparent_70%)] blur-[20px]" />
+            </div>
 
-      {/* Ambient light orbs */}
-      <div className="absolute top-[20%] left-[60%] w-[300px] h-[300px] rounded-full bg-[rgba(139,92,246,0.06)] blur-[80px] ambient-light" data-offset="0" />
-      <div className="absolute top-[50%] right-[20%] w-[200px] h-[200px] rounded-full bg-[rgba(212,175,55,0.04)] blur-[60px] ambient-light" data-offset="1" />
+            {/* Knot / base */}
+            <div className="absolute bottom-[-8px] left-1/2 -translate-x-1/2 w-[12px] h-[16px] bg-gradient-to-b from-[rgba(212,175,55,0.3)] to-[rgba(139,92,246,0.2)] rounded-b-full border border-[rgba(212,175,55,0.15)]" />
 
-      <div className="relative z-10 max-w-[1280px] mx-auto px-6 pt-[120px] pb-20 min-h-screen flex flex-col lg:flex-row items-center gap-12 lg:gap-0">
-        {/* LEFT CONTENT */}
-        <div className="flex-1 text-center lg:text-left">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-[#d4af37] tracking-[0.15em] uppercase mb-8 font-medium border-[rgba(212,175,55,0.15)]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] animate-pulse-glow" />
-            Pune&apos;s Premium Decorators
-          </div>
-
-          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-semibold leading-[1.05] tracking-[-0.03em] text-white mb-6 text-balance">
-            Luxury Balloon
-            <br />
-            <span className="gold-gradient">Decorations</span>
-            <br />
-            For Every Celebration
-          </h1>
-
-          <p className="text-base sm:text-lg text-[rgba(255,255,255,0.55)] max-w-[520px] leading-relaxed font-light mb-10 mx-auto lg:mx-0">
-            Premium balloon decoration services across Pune and 160+ KM surrounding areas. Transform every celebration into an unforgettable memory.
-          </p>
-
-          <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-            <a
-              href="https://wa.me/919876543210?text=Hi%20Mahek%20Decorator!%20I%27d%20like%20to%20book%20a%20decoration."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-3.5 rounded-full btn-gold text-sm no-underline inline-flex items-center gap-2"
+            {/* Ribbons */}
+            <svg
+              ref={ribbonRef}
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              viewBox="0 0 400 520"
+              fill="none"
             >
-              Book Now
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-            </a>
-            <a
-              href="#decorations"
-              className="px-8 py-3.5 rounded-full btn-outline text-sm no-underline inline-flex items-center gap-2"
-            >
-              Explore Decorations
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-            </a>
-          </div>
-
-          {/* Trust indicators */}
-          <div className="flex flex-wrap gap-8 mt-14 justify-center lg:justify-start">
-            {[
-              { number: '500+', label: 'Events Decorated' },
-              { number: '160 KM', label: 'Service Radius' },
-              { number: '4.9', label: 'Client Rating' },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center lg:text-left">
-                <div className="text-xl font-display font-semibold gold-gradient">{stat.number}</div>
-                <div className="text-xs text-[rgba(255,255,255,0.4)] mt-0.5 tracking-wide">{stat.label}</div>
-              </div>
-            ))}
+              <path
+                d="M200 60 C160 40, 100 80, 80 160 C60 240, 80 300, 120 340"
+                stroke="url(#r1)"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                opacity="0.5"
+              />
+              <path
+                d="M200 60 C240 40, 300 80, 320 160 C340 240, 320 300, 280 340"
+                stroke="url(#r2)"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                opacity="0.5"
+              />
+              <path
+                d="M200 60 C180 20, 140 50, 120 120 C100 190, 140 260, 180 300"
+                stroke="url(#r1)"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                opacity="0.3"
+              />
+              <defs>
+                <linearGradient id="r1" x1="0" y1="0" x2="0" y2="1">
+                  <stop stopColor="#d4af37" />
+                  <stop offset="1" stopColor="#8b5cf6" stopOpacity="0.3" />
+                </linearGradient>
+                <linearGradient id="r2" x1="0" y1="0" x2="0" y2="1">
+                  <stop stopColor="#8b5cf6" />
+                  <stop offset="1" stopColor="#d4af37" stopOpacity="0.3" />
+                </linearGradient>
+              </defs>
+            </svg>
           </div>
         </div>
 
-        {/* RIGHT SHOWCASE */}
-        <div className="flex-1 flex items-center justify-center relative h-[400px] sm:h-[500px] lg:h-[600px] w-full">
-          {/* Main balloon arch */}
-          <div className="relative w-full h-full flex items-center justify-center">
-            {/* Balloon cluster - back layer */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              {[
-                { size: 100, x: -40, y: -30, color: 'rgba(212,175,55,0.15)', delay: 0 },
-                { size: 80, x: 50, y: -20, color: 'rgba(139,92,246,0.12)', delay: 0.5 },
-                { size: 90, x: -30, y: 40, color: 'rgba(212,175,55,0.1)', delay: 1 },
-                { size: 70, x: 60, y: 30, color: 'rgba(139,92,246,0.15)', delay: 1.5 },
-                { size: 110, x: 0, y: -50, color: 'rgba(212,175,55,0.12)', delay: 0.3 },
-              ].map((b, i) => (
-                <div
-                  key={`b-${i}`}
-                  className="float-balloon absolute rounded-[50%_50%_50%_50%/45%_45%_55%_55%]"
-                  style={{
-                    width: b.size,
-                    height: b.size * 1.25,
-                    background: `radial-gradient(ellipse at 35% 30%, ${b.color.replace('0.1', '0.3').replace('0.12', '0.35').replace('0.15', '0.4')}, ${b.color})`,
-                    left: `calc(50% + ${b.x}px)`,
-                    top: `calc(50% + ${b.y}px)`,
-                    transform: `translate(-50%, -50%)`,
-                    boxShadow: `inset -20px -10px 30px rgba(0,0,0,0.2), 0 0 40px ${b.color}`,
-                    border: '1px solid rgba(255,255,255,0.05)',
-                    animationDelay: `${b.delay}s`,
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Front centerpiece balloon */}
+        {/* Particles */}
+        <div className="absolute inset-0 z-[4] pointer-events-none">
+          {Array.from({ length: 30 }).map((_, i) => (
             <div
-              className="float-balloon absolute rounded-[50%_50%_50%_50%/40%_40%_60%_60%]"
+              key={i}
+              ref={(el) => (particlesRef.current[i] = el)}
+              className="absolute w-1 h-1 rounded-full"
               style={{
-                width: 140,
-                height: 175,
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%)',
-                background: 'radial-gradient(ellipse at 30% 25%, rgba(212,175,55,0.35), rgba(139,92,246,0.2) 60%, rgba(11,11,11,0.4))',
-                boxShadow: 'inset -30px -15px 40px rgba(0,0,0,0.3), 0 0 60px rgba(212,175,55,0.15), 0 0 120px rgba(139,92,246,0.08)',
-                border: '1px solid rgba(212,175,55,0.15)',
-              }}
-            >
-              {/* Gold reflection */}
-              <div
-                className="absolute rounded-full"
-                style={{
-                  width: 30,
-                  height: 50,
-                  background: 'rgba(212,175,55,0.2)',
-                  top: '20%',
-                  left: '20%',
-                  filter: 'blur(8px)',
-                }}
-              />
-              <div
-                className="absolute rounded-full"
-                style={{
-                  width: 20,
-                  height: 40,
-                  background: 'rgba(255,255,255,0.08)',
-                  top: '15%',
-                  left: '30%',
-                  filter: 'blur(12px)',
-                }}
-              />
-            </div>
-
-            {/* Gold sparkle accents */}
-            {[...Array(6)].map((_, i) => (
-              <div
-                key={`s-${i}`}
-                className="particle absolute w-1.5 h-1.5 rounded-full"
-                style={{
-                  background: '#d4af37',
-                  left: `calc(50% + ${Math.cos(i * 1.047) * 90}px)`,
-                  top: `calc(50% + ${Math.sin(i * 1.047) * 90}px)`,
-                  boxShadow: '0 0 10px rgba(212,175,55,0.5), 0 0 20px rgba(212,175,55,0.2)',
-                }}
-              />
-            ))}
-
-            {/* Purple glow ring */}
-            <div
-              className="absolute rounded-full animate-pulse-glow"
-              style={{
-                width: 200,
-                height: 200,
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%)',
-                background: 'radial-gradient(circle, rgba(139,92,246,0.08), transparent 70%)',
-                filter: 'blur(30px)',
+                left: `${3 + (i * 11) % 94}%`,
+                top: `${5 + (i * 17) % 90}%`,
+                background: i % 3 === 0 ? '#d4af37' : i % 3 === 1 ? '#8b5cf6' : 'rgba(255,255,255,0.3)',
+                boxShadow: i % 2 === 0 ? '0 0 6px rgba(212,175,55,0.3)' : '0 0 6px rgba(139,92,246,0.3)',
+                width: `${2 + (i % 3)}px`,
+                height: `${2 + (i % 3)}px`,
               }}
             />
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div
+          ref={ctaRef}
+          className="absolute bottom-[12%] left-1/2 -translate-x-1/2 z-[5] opacity-0 translate-y-8"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col items-center gap-4"
+          >
+            <a
+              href={whatsappUrl(CONFIG.whatsappMessages.booking)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-3.5 rounded-full btn-gold text-sm no-underline inline-flex items-center gap-2 group"
+            >
+              <span>Book Experience</span>
+              <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+            <span className="text-[10px] text-[rgba(255,255,255,0.2)] tracking-[0.25em] uppercase font-medium">
+              Scroll to explore
+            </span>
+          </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-[5%] left-1/2 -translate-x-1/2 z-[5]">
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-[1px] h-10 bg-gradient-to-b from-[rgba(255,255,255,0.2)] to-transparent" />
+            <div className="w-1 h-1 rounded-full bg-[#d4af37] animate-pulse-glow" />
           </div>
         </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
-        <span className="text-[10px] text-[rgba(255,255,255,0.25)] tracking-[0.2em] uppercase font-medium">Scroll</span>
-        <div className="w-[1px] h-8 bg-gradient-to-b from-[rgba(255,255,255,0.3)] to-transparent animate-bounce" />
       </div>
     </section>
   )

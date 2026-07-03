@@ -1,0 +1,27 @@
+[build]
+  command = "npm run build"
+  functions = "backend"
+  publish = ".next"
+
+[dev]
+  command = "npm run dev:all"
+  port = 3000
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/server/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[context.production]
+  environment = {NEXT_PUBLIC_API_URL = "https://mahek-decorator.netlify.app/api"}
+
+[context.preview]
+  environment = {NEXT_PUBLIC_API_URL = "https://preview--mahek-decorator.netlify.app/api"}
+
+[context.deploy-preview]
+  environment = {NEXT_PUBLIC_API_URL = "https://deploy-preview--mahek-decorator.netlify.app/api"}
