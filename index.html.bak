@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAHEK DECORATOR — Premium Balloon Decorations, Pune</title>
+<meta name="description" content="Premium balloon decoration services across Pune and nearby cities. Transform every celebration into a memory with Mahek Decorators.">
+<meta name="keywords" content="balloon decoration, balloon decorators, balloon decoration in pune, party decoration, wedding decoration, event decoration">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<style>
+:root {
+  --primary: #111111;
+  --secondary: #F5F5F2;
+  --accent: #D4AF37;
+  --accent-light: #E8C84A;
+  --accent-dark: #B8962E;
+  --white: #FFFFFF;
+  --light-gray: #E8E8E5;
+  --charcoal: #2A2A2A;
+  --gray-100: #F7F7F5;
+  --gray-200: #EDEDE8;
+  --gray-300: #D4D4CF;
+  --gray-400: #A0A09C;
+  --gray-500: #6B6B68;
+  --gray-600: #4A4A48;
+  --font-display: 'Clash Display', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-ui: 'Satoshi', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: auto; }
+body { font-family: var(--font-body); background: var(--white); color: var(--primary); overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+h1,h2,h3,h4,h5,h6 { font-family: var(--font-display); font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
+.font-ui { font-family: var(--font-ui); }
+
+.loader { position: fixed; inset:0; z-index:9999; background:var(--primary); display:flex; flex-direction:column; align-items:center; justify-content:center; transition: opacity 0.8s ease, visibility 0.8s ease; }
+.loader.hidden { opacity:0; visibility:hidden; }
+.loader-ring { width:60px; height:60px; border:2px solid rgba(212,175,55,0.1); border-top-color:var(--accent); border-radius:50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.loader-text { font-family:var(--font-display); color:var(--accent); margin-top:24px; font-size:14px; letter-spacing:0.15em; text-transform:uppercase; }
+
+.nav { position:fixed; top:0; left:0; right:0; z-index:1000; padding:20px 40px; display:flex; align-items:center; justify-content:space-between; transition: all 0.5s cubic-bezier(0.16,1,0.3,1); }
+.nav.scrolled { background:rgba(17,17,17,0.92); backdrop-filter:blur(24px) saturate(1.4); -webkit-backdrop-filter:blur(24px) saturate(1.4); padding:14px 40px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.nav-logo { font-family:var(--font-display); font-size:22px; font-weight:700; color:var(--white); letter-spacing:-0.03em; text-decoration:none; }
+.nav-logo span { color:var(--accent); }
+.nav-links { display:flex; align-items:center; gap:32px; list-style:none; }
+.nav-links a { font-family:var(--font-ui); font-size:14px; color:rgba(255,255,255,0.7); text-decoration:none; transition:color 0.3s; position:relative; }
+.nav-links a:hover { color:var(--white); }
+.nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background:var(--accent); transition:width 0.4s cubic-bezier(0.16,1,0.3,1); }
+.nav-links a:hover::after { width:100%; }
+.nav-cta { background:var(--accent); color:var(--primary) !important; padding:8px 20px; border-radius:100px; font-weight:500; font-size:13px !important; transition: all 0.3s !important; }
+.nav-cta:hover { background:var(--accent-light) !important; transform:translateY(-1px); }
+.nav-cta::after { display:none !important; }
+.nav-mobile-btn { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+.nav-mobile-btn span { width:24px; height:1.5px; background:var(--white); transition:all 0.3s; border-radius:2px; }
+.nav-mobile-btn.active span:nth-child(1) { transform:rotate(45deg) translate(4px,5px); }
+.nav-mobile-btn.active span:nth-child(2) { opacity:0; }
+.nav-mobile-btn.active span:nth-child(3) { transform:rotate(-45deg) translate(4px,-5px); }
+
+.hero { position:relative; height:100vh; background:#050505; overflow:hidden; }
+#hero-canvas { position:absolute; inset:0; width:100%; height:100%; z-index:1; display:block; }
+.hero-overlay { position:absolute; inset:0; background: radial-gradient(ellipse at center, transparent 30%, rgba(5,5,5,0.7) 70%, #050505 100%); z-index:2; pointer-events:none; }
+.hero-content { position:relative; z-index:3; text-align:center; max-width:900px; padding:0 24px; }
+.hero-badge { display:inline-flex; align-items:center; gap:8px; padding:8px 20px; border:1px solid rgba(212,175,55,0.25); border-radius:100px; font-family:var(--font-ui); font-size:12px; color:var(--accent); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:32px; backdrop-filter:blur(8px); background:rgba(212,175,55,0.05); }
+.hero-badge-dot { width:6px; height:6px; background:var(--accent); border-radius:50%; animation:pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+.hero h1 { font-size:clamp(48px,8vw,96px); color:var(--white); margin-bottom:20px; line-height:1.05; will-change:transform; }
+.hero h1 .accent { color:var(--accent); }
+.hero p { font-family:var(--font-ui); font-size:clamp(16px,2vw,22px); color:rgba(255,255,255,0.6); line-height:1.6; max-width:600px; margin:0 auto 40px; font-weight:300; }
+.hero-actions { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+.btn { font-family:var(--font-ui); font-size:14px; font-weight:500; padding:14px 32px; border-radius:100px; text-decoration:none; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); cursor:pointer; border:none; display:inline-flex; align-items:center; gap:8px; }
+.btn-primary { background:var(--accent); color:var(--primary); }
+.btn-primary:hover { background:var(--accent-light); transform:translateY(-2px); box-shadow:0 12px 32px rgba(212,175,55,0.25); }
+.btn-outline { border:1px solid rgba(255,255,255,0.2); color:var(--white); background:transparent; }
+.btn-outline:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-2px); background:rgba(212,175,55,0.08); }
+.btn-dark { background:var(--primary); color:var(--white); }
+.btn-dark:hover { background:var(--charcoal); transform:translateY(-2px); }
+.hero-scroll { position:absolute; bottom:40px; left:50%; transform:translateX(-50%); z-index:3; display:flex; flex-direction:column; align-items:center; gap:8px; color:rgba(255,255,255,0.3); font-size:11px; font-family:var(--font-ui); letter-spacing:0.15em; text-transform:uppercase; }
+.hero-scroll-line { width:1px; height:40px; background:linear-gradient(to bottom, rgba(255,255,255,0.3), transparent); animation:scrollLine 2s ease-in-out infinite; }
+@keyframes scrollLine { 0%,100% { transform:scaleY(0.3); opacity:0.3; } 50% { transform:scaleY(1); opacity:1; } }
+
+.hero-float-balloon { position:absolute; z-index:2; pointer-events:none; }
+.bal { width:80px; height:100px; background: radial-gradient(ellipse at 35% 35%, rgba(212,175,55,0.4), rgba(212,175,55,0.1)); border-radius:50% 50% 50% 50% / 45% 45% 55% 55%; transform-origin:center bottom; animation:float 4s ease-in-out infinite; position:relative; }
+.bal::after { content:''; position:absolute; bottom:-12px; left:50%; transform:translateX(-50%); width:1px; height:30px; background:rgba(212,175,55,0.3); }
+.bal-string { position:absolute; bottom:-12px; left:50%; width:1px; background:linear-gradient(to bottom, rgba(212,175,55,0.4), transparent); transform-origin:top; }
+@keyframes float { 0%,100% { transform:translateY(0px); } 50% { transform:translateY(-20px); } }
+
+.story-section { position:relative; background:var(--white); overflow:hidden; }
+.story-pin { position:relative; height:400vh; }
+.story-sticky { position:sticky; top:0; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; background:var(--primary); }
+.story-canvas { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.story-content { position:relative; z-index:2; text-align:center; max-width:700px; padding:0 24px; }
+.story-content h2 { font-size:clamp(36px,5vw,64px); color:var(--white); margin-bottom:16px; }
+.story-content p { font-family:var(--font-ui); color:rgba(255,255,255,0.6); font-size:18px; line-height:1.7; }
+.story-visual { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+
+.story-balloon { position:relative; width:120px; height:150px; }
+.story-balloon .balloon-body { width:120px; height:150px; background: radial-gradient(ellipse at 35% 30%, rgba(212,175,55,0.6), rgba(212,175,55,0.15) 70%, rgba(212,175,55,0.05)); border-radius:50% 50% 50% 50% / 45% 45% 55% 55%; position:relative; }
+.story-balloon .balloon-body::after { content:''; position:absolute; bottom:-8px; left:50%; transform:translateX(-50%); width:2px; height:60px; background:linear-gradient(to bottom, rgba(212,175,55,0.5), transparent); }
+
+.story-ribbon { position:absolute; width:200px; height:8px; background:linear-gradient(90deg, transparent, var(--accent), transparent); border-radius:4px; opacity:0; transform-origin:center; }
+.story-arch { position:absolute; width:300px; height:150px; border:3px solid rgba(212,175,55,0.3); border-bottom:none; border-radius:300px 300px 0 0; opacity:0; }
+.story-deco { position:absolute; width:200px; height:200px; opacity:0; border-radius:50%; background:radial-gradient(circle, rgba(212,175,55,0.2), transparent); }
+
+.story-scenes { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.story-scene { position:absolute; text-align:center; max-width:500px; padding:24px; opacity:0; }
+.story-scene h3 { font-family:var(--font-display); font-size:28px; color:var(--white); margin-bottom:8px; }
+.story-scene p { font-family:var(--font-ui); color:rgba(255,255,255,0.5); font-size:15px; line-height:1.6; }
+
+.section { padding:120px 0; position:relative; }
+.section-dark { background:var(--primary); }
+.section-light { background:var(--secondary); }
+.section-white { background:var(--white); }
+.container { max-width:1280px; margin:0 auto; padding:0 24px; }
+.section-label { font-family:var(--font-ui); font-size:12px; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); margin-bottom:12px; font-weight:500; }
+.section-title { font-size:clamp(32px,4vw,52px); margin-bottom:16px; }
+.section-subtitle { font-family:var(--font-ui); font-size:18px; color:var(--gray-500); line-height:1.7; max-width:500px; font-weight:300; }
+.section-header { margin-bottom:64px; }
+
+.occasions-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; }
+.occ-card { position:relative; border-radius:16px; overflow:hidden; background:var(--white); border:1px solid var(--gray-200); transition: all 0.5s cubic-bezier(0.16,1,0.3,1); cursor:pointer; }
+.occ-card:hover { transform:translateY(-8px); box-shadow:0 32px 64px rgba(0,0,0,0.08); border-color:transparent; }
+.occ-card-img { width:100%; height:200px; object-fit:cover; transition:transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+.occ-card:hover .occ-card-img { transform:scale(1.05); }
+.occ-card-body { padding:20px; }
+.occ-card-body h3 { font-family:var(--font-display); font-size:18px; font-weight:600; margin-bottom:4px; }
+.occ-card-body p { font-family:var(--font-ui); font-size:14px; color:var(--gray-500); line-height:1.5; }
+.occ-card-price { font-family:var(--font-ui); font-size:15px; font-weight:600; color:var(--accent-dark); margin-top:12px; }
+
+.categories { display:flex; flex-direction:column; gap:120px; }
+.cat-row { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.cat-row.reverse { direction:rtl; }
+.cat-row.reverse > * { direction:ltr; }
+.cat-info { padding-right:40px; }
+.cat-label { font-family:var(--font-ui); font-size:12px; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+.cat-title { font-size:clamp(28px,3.5vw,42px); margin-bottom:12px; }
+.cat-price { font-family:var(--font-display); font-size:32px; color:var(--accent); margin-bottom:16px; font-weight:600; }
+.cat-desc { font-family:var(--font-ui); color:var(--gray-500); line-height:1.7; margin-bottom:24px; font-size:15px; }
+.cat-list { list-style:none; display:flex; flex-wrap:wrap; gap:8px; }
+.cat-list li { padding:6px 16px; border:1px solid var(--gray-200); border-radius:100px; font-family:var(--font-ui); font-size:13px; color:var(--gray-600); transition:all 0.3s; }
+.cat-list li:hover { border-color:var(--accent); color:var(--accent-dark); background:rgba(212,175,55,0.04); }
+.cat-visual { position:relative; }
+.cat-visual-img { width:100%; border-radius:20px; overflow:hidden; }
+.cat-visual-img img { width:100%; height:420px; object-fit:cover; transition:transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+.cat-visual:hover img { transform:scale(1.03); }
+.cat-badge { position:absolute; top:20px; left:20px; background:var(--primary); color:var(--white); padding:8px 16px; border-radius:100px; font-family:var(--font-ui); font-size:12px; font-weight:500; }
+
+.gallery-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.gallery-item { position:relative; border-radius:12px; overflow:hidden; cursor:pointer; aspect-ratio:4/3; }
+.gallery-item.tall { aspect-ratio:3/4; grid-row:span 2; }
+.gallery-item.wide { grid-column:span 2; }
+.gallery-item img { width:100%; height:100%; object-fit:cover; transition:transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+.gallery-item:hover img { transform:scale(1.05); }
+.gallery-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(17,17,17,0.6), transparent); opacity:0; transition:opacity 0.4s; display:flex; align-items:flex-end; padding:20px; }
+.gallery-item:hover .gallery-overlay { opacity:1; }
+.gallery-overlay span { font-family:var(--font-ui); color:var(--white); font-size:14px; }
+
+.testimonials { overflow:hidden; }
+.testimonials-track { display:flex; gap:24px; animation:scroll-testimonials 40s linear infinite; }
+.testimonials:hover .testimonials-track { animation-play-state:paused; }
+@keyframes scroll-testimonials { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+.testimonial-card { min-width:380px; background:var(--white); border:1px solid var(--gray-200); border-radius:16px; padding:28px; flex-shrink:0; }
+.testimonial-stars { color:var(--accent); font-size:14px; margin-bottom:12px; letter-spacing:2px; }
+.testimonial-text { font-family:var(--font-ui); color:var(--gray-600); line-height:1.7; font-size:14px; margin-bottom:16px; }
+.testimonial-author { display:flex; align-items:center; gap:12px; }
+.testimonial-avatar { width:40px; height:40px; border-radius:50%; background:var(--gray-200); object-fit:cover; }
+.testimonial-name { font-family:var(--font-ui); font-size:14px; font-weight:600; }
+.testimonial-role { font-family:var(--font-ui); font-size:12px; color:var(--gray-400); }
+
+.reel-section { position:relative; overflow:hidden; }
+.reels-track { display:flex; gap:16px; }
+.reel-card { min-width:240px; border-radius:12px; overflow:hidden; aspect-ratio:9/16; background:var(--primary); position:relative; cursor:pointer; }
+.reel-card img,.reel-card video { width:100%; height:100%; object-fit:cover; }
+.reel-play { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(17,17,17,0.3); }
+.reel-play-icon { width:48px; height:48px; border:2px solid rgba(255,255,255,0.6); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:20px; }
+
+.blog-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
+.blog-card { border-radius:16px; overflow:hidden; border:1px solid var(--gray-200); transition:all 0.5s cubic-bezier(0.16,1,0.3,1); cursor:pointer; }
+.blog-card:hover { transform:translateY(-8px); box-shadow:0 32px 64px rgba(0,0,0,0.06); }
+.blog-card-img { width:100%; height:220px; object-fit:cover; transition:transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+.blog-card:hover .blog-card-img { transform:scale(1.03); }
+.blog-card-body { padding:24px; }
+.blog-card-tag { font-family:var(--font-ui); font-size:12px; color:var(--accent); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px; }
+.blog-card-body h3 { font-family:var(--font-display); font-size:20px; margin-bottom:8px; }
+.blog-card-body p { font-family:var(--font-ui); font-size:14px; color:var(--gray-500); line-height:1.6; }
+
+.faq-list { max-width:800px; margin:0 auto; }
+.faq-item { border-bottom:1px solid var(--gray-200); padding:0; }
+.faq-q { padding:24px 0; display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-family:var(--font-ui); font-size:16px; font-weight:500; color:var(--primary); transition:color 0.3s; background:none; border:none; width:100%; text-align:left; }
+.faq-q:hover { color:var(--accent-dark); }
+.faq-q-icon { width:20px; height:20px; position:relative; flex-shrink:0; transition:transform 0.4s; }
+.faq-item.active .faq-q-icon { transform:rotate(45deg); }
+.faq-q-icon::before,.faq-q-icon::after { content:''; position:absolute; background:var(--gray-400); border-radius:1px; }
+.faq-q-icon::before { width:100%; height:2px; top:50%; transform:translateY(-50%); }
+.faq-q-icon::after { width:2px; height:100%; left:50%; transform:translateX(-50%); }
+.faq-a { max-height:0; overflow:hidden; transition: all 0.5s cubic-bezier(0.16,1,0.3,1); }
+.faq-item.active .faq-a { max-height:500px; padding-bottom:24px; }
+.faq-a p { font-family:var(--font-ui); font-size:15px; color:var(--gray-500); line-height:1.7; }
+
+.footer { background:var(--primary); color:var(--white); padding:80px 0 40px; }
+.footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:60px; margin-bottom:60px; }
+.footer-brand h3 { font-family:var(--font-display); font-size:28px; margin-bottom:12px; }
+.footer-brand h3 span { color:var(--accent); }
+.footer-brand p { font-family:var(--font-ui); color:var(--gray-400); font-size:14px; line-height:1.7; max-width:300px; }
+.footer h4 { font-family:var(--font-ui); font-size:12px; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); margin-bottom:20px; }
+.footer ul { list-style:none; }
+.footer ul li { margin-bottom:12px; }
+.footer ul a { font-family:var(--font-ui); font-size:14px; color:var(--gray-400); text-decoration:none; transition:color 0.3s; }
+.footer ul a:hover { color:var(--white); }
+.footer-bottom { border-top:1px solid rgba(255,255,255,0.06); padding-top:24px; display:flex; justify-content:space-between; align-items:center; font-family:var(--font-ui); font-size:13px; color:var(--gray-500); }
+.footer-socials { display:flex; gap:16px; }
+.footer-socials a { width:36px; height:36px; border:1px solid rgba(255,255,255,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--gray-400); text-decoration:none; transition:all 0.3s; font-size:14px; }
+.footer-socials a:hover { border-color:var(--accent); color:var(--accent); }
+
+.ai-chat-btn { position:fixed; bottom:32px; right:32px; z-index:900; width:56px; height:56px; border-radius:50%; background:var(--accent); border:none; cursor:pointer; box-shadow:0 8px 24px rgba(212,175,55,0.3); display:flex; align-items:center; justify-content:center; font-size:24px; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); }
+.ai-chat-btn:hover { transform:scale(1.1); box-shadow:0 12px 36px rgba(212,175,55,0.4); }
+.ai-chat-panel { position:fixed; bottom:100px; right:32px; z-index:900; width:380px; max-height:520px; background:var(--white); border-radius:20px; box-shadow:0 32px 80px rgba(0,0,0,0.15); border:1px solid var(--gray-200); display:none; flex-direction:column; overflow:hidden; }
+.ai-chat-panel.open { display:flex; }
+.ai-chat-header { padding:20px 24px; background:var(--primary); color:var(--white); display:flex; justify-content:space-between; align-items:center; }
+.ai-chat-header h3 { font-family:var(--font-display); font-size:16px; }
+.ai-chat-header span { font-family:var(--font-ui); font-size:12px; color:var(--accent); }
+.ai-chat-close { background:none; border:none; color:rgba(255,255,255,0.5); cursor:pointer; font-size:18px; }
+.ai-chat-messages { flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; }
+.ai-msg { max-width:85%; padding:12px 16px; border-radius:14px; font-family:var(--font-ui); font-size:14px; line-height:1.6; }
+.ai-msg.bot { align-self:flex-start; background:var(--gray-100); color:var(--gray-600); border-bottom-left-radius:4px; }
+.ai-msg.user { align-self:flex-end; background:var(--accent); color:var(--primary); border-bottom-right-radius:4px; }
+.ai-msg .price { color:var(--accent-dark); font-weight:600; }
+.ai-chat-input { display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--gray-200); }
+.ai-chat-input input { flex:1; border:none; outline:none; font-family:var(--font-ui); font-size:14px; padding:8px 0; color:var(--primary); background:transparent; }
+.ai-chat-input input::placeholder { color:var(--gray-400); }
+.ai-chat-input button { background:var(--accent); border:none; color:var(--primary); width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform 0.2s; }
+.ai-chat-input button:hover { transform:scale(1.05); }
+
+.modal-overlay { position:fixed; inset:0; z-index:2000; background:rgba(17,17,17,0.8); backdrop-filter:blur(12px); display:none; align-items:center; justify-content:center; padding:24px; }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--white); border-radius:20px; max-width:560px; width:100%; max-height:90vh; overflow-y:auto; padding:40px; position:relative; }
+.modal-close { position:absolute; top:20px; right:20px; width:36px; height:36px; border-radius:50%; border:1px solid var(--gray-200); background:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--gray-400); transition:all 0.3s; }
+.modal-close:hover { border-color:var(--accent); color:var(--accent-dark); }
+.modal h2 { font-size:28px; margin-bottom:24px; }
+
+.booking-steps { display:flex; flex-direction:column; gap:24px; }
+.booking-step { }
+.booking-step h4 { font-family:var(--font-ui); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:var(--gray-400); margin-bottom:8px; }
+.booking-step .step-title { font-family:var(--font-display); font-size:20px; margin-bottom:12px; }
+.booking-options { display:flex; flex-wrap:wrap; gap:8px; }
+.booking-option { padding:10px 20px; border:1px solid var(--gray-200); border-radius:100px; font-family:var(--font-ui); font-size:13px; cursor:pointer; transition:all 0.3s; background:none; color:var(--gray-600); }
+.booking-option:hover { border-color:var(--accent); color:var(--accent-dark); }
+.booking-option.selected { background:var(--accent); border-color:var(--accent); color:var(--primary); font-weight:500; }
+.booking-field { width:100%; padding:12px 16px; border:1px solid var(--gray-200); border-radius:12px; font-family:var(--font-ui); font-size:14px; outline:none; transition:border-color 0.3s; color:var(--primary); background:var(--white); }
+.booking-field:focus { border-color:var(--accent); }
+
+.filter-bar { display:flex; gap:12px; flex-wrap:wrap; align-items:center; padding:16px 0; margin-bottom:40px; }
+.filter-select { padding:10px 20px; border:1px solid var(--gray-200); border-radius:100px; font-family:var(--font-ui); font-size:13px; background:var(--white); cursor:pointer; outline:none; color:var(--gray-600); transition:border-color 0.3s; }
+.filter-select:focus { border-color:var(--accent); }
+.filter-select option { color:var(--primary); }
+
+.parallax-slow { will-change:transform; }
+.reveal { opacity:0; transform:translateY(40px); transition: all 1s cubic-bezier(0.16,1,0.3,1); }
+.reveal.visible { opacity:1; transform:translateY(0); }
+.reveal-delay-1 { transition-delay:0.1s; }
+.reveal-delay-2 { transition-delay:0.2s; }
+.reveal-delay-3 { transition-delay:0.3s; }
+.reveal-delay-4 { transition-delay:0.4s; }
+
+.gradient-text { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 50%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+.pricing-card { background:var(--white); border:1px solid var(--gray-200); border-radius:20px; padding:32px; transition:all 0.5s cubic-bezier(0.16,1,0.3,1); }
+.pricing-card:hover { transform:translateY(-8px); box-shadow:0 32px 64px rgba(0,0,0,0.06); border-color:transparent; }
+.pricing-card.featured { border-color:var(--accent); background:linear-gradient(135deg, rgba(212,175,55,0.03), transparent); }
+.pricing-card h3 { font-size:24px; margin-bottom:4px; }
+.pricing-card .price-range { font-family:var(--font-display); font-size:36px; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.pricing-card ul { list-style:none; margin-bottom:24px; }
+.pricing-card ul li { padding:8px 0; font-family:var(--font-ui); font-size:14px; color:var(--gray-600); border-bottom:1px solid var(--gray-100); display:flex; align-items:center; gap:8px; }
+.pricing-card ul li::before { content:'✓'; color:var(--accent); font-weight:600; }
+
+.city-marquee { overflow:hidden; padding:40px 0; }
+.city-track { display:flex; gap:16px; animation:scroll-cities 30s linear infinite; }
+.city-chip { padding:12px 24px; border:1px solid var(--gray-200); border-radius:100px; font-family:var(--font-ui); font-size:14px; color:var(--gray-600); white-space:nowrap; transition:all 0.3s; cursor:pointer; text-decoration:none; display:inline-block; }
+.city-chip:hover { border-color:var(--accent); color:var(--accent-dark); background:rgba(212,175,55,0.04); }
+@keyframes scroll-cities { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+
+@media (max-width:1024px) {
+  .cat-row { grid-template-columns:1fr; gap:40px; }
+  .cat-row.reverse { direction:ltr; }
+  .blog-grid { grid-template-columns:1fr 1fr; }
+  .footer-grid { grid-template-columns:1fr 1fr; gap:40px; }
+  .gallery-grid { grid-template-columns:1fr 1fr; }
+}
+@media (max-width:768px) {
+  .nav { padding:16px 20px; }
+  .nav.scrolled { padding:12px 20px; }
+  .nav-links { display:none; }
+  .nav-links.open { display:flex; flex-direction:column; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(17,17,17,0.98); backdrop-filter:blur(24px); padding:80px 40px; gap:24px; align-items:center; justify-content:center; }
+  .nav-links.open a { font-size:24px; }
+  .nav-mobile-btn { display:flex; }
+  .nav-links .nav-cta { font-size:16px !important; padding:12px 32px; }
+  .container { padding:0 20px; }
+  .section { padding:80px 0; }
+  .occasions-grid { grid-template-columns:1fr 1fr; gap:12px; }
+  .blog-grid { grid-template-columns:1fr; }
+  .footer-grid { grid-template-columns:1fr; gap:32px; }
+  .gallery-grid { grid-template-columns:1fr; }
+  .gallery-item.tall { grid-row:span 1; }
+  .gallery-item.wide { grid-column:span 1; }
+  .ai-chat-panel { width:calc(100vw - 32px); right:16px; bottom:90px; max-height:480px; }
+  .testimonial-card { min-width:300px; }
+  .booking-options { gap:6px; }
+  .booking-option { padding:8px 16px; font-size:12px; }
+  .pricing-card { padding:24px; }
+}
+@media (max-width:480px) {
+  .occasions-grid { grid-template-columns:1fr; }
+  .hero h1 { font-size:36px; }
+  .hero-actions { flex-direction:column; align-items:center; }
+  .btn { width:100%; justify-content:center; }
+  .nav-logo { font-size:18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="loader" id="loader">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Mahek Decorators</div>
+</div>
+
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">Mahek<span>.</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#occasions">Occasions</a></li>
+    <li><a href="#categories">Packages</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#contact" class="nav-cta">Book Now</a></li>
+  </ul>
+  <button class="nav-mobile-btn" id="navMobileBtn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<section class="hero" id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-overlay"></div>
+</section>
+
+<section class="story-section" id="storytelling">
+  <div class="story-pin" id="storyPin">
+    <div class="story-sticky" id="storySticky">
+      <div class="story-canvas" id="storyCanvas">
+        <div class="story-balloon" id="storyBalloon">
+          <div class="balloon-body"></div>
+        </div>
+        <div class="story-ribbon" id="storyRibbon1" style="top:30%;left:20%;"></div>
+        <div class="story-ribbon" id="storyRibbon2" style="top:40%;right:25%;"></div>
+        <div class="story-arch" id="storyArch1" style="top:25%;left:50%;transform:translateX(-50%);"></div>
+        <div class="story-arch" id="storyArch2" style="bottom:30%;right:15%;"></div>
+        <div class="story-deco" id="storyDeco1" style="top:40%;left:30%;"></div>
+        <div class="story-deco" id="storyDeco2" style="bottom:35%;right:30%;"></div>
+      </div>
+      <div class="story-scenes">
+        <div class="story-scene" id="scene1">
+          <h3>A Single Balloon</h3>
+          <p>Every great celebration begins with a single, elegant balloon — a promise of joy to come.</p>
+        </div>
+        <div class="story-scene" id="scene2">
+          <h3>Ribbons Begin to Flow</h3>
+          <p>The string transforms into graceful ribbons, dancing through the air with effortless beauty.</p>
+        </div>
+        <div class="story-scene" id="scene3">
+          <h3>Arches Take Shape</h3>
+          <p>Ribbons rise and curve into magnificent arches, framing moments that matter most.</p>
+        </div>
+        <div class="story-scene" id="scene4">
+          <h3>Decorations Bloom</h3>
+          <p>Arches blossom into elaborate decorations, filling spaces with warmth and wonder.</p>
+        </div>
+        <div class="story-scene" id="scene5">
+          <h3>A Complete Celebration</h3>
+          <p>From one balloon to an entire celebration — every detail crafted to perfection.</p>
+        </div>
+      </div>
+      <div class="story-content" id="storyContent" style="opacity:0;">
+        <h2>From a Single Balloon<br>to a <span class="gradient-text">Complete Celebration</span></h2>
+        <p>Watch the magic unfold as we transform simple beginnings into extraordinary memories.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-light" id="occasions">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Popular Occasions</div>
+      <h2 class="section-title">Every Moment<br>Deserves Beauty</h2>
+      <p class="section-subtitle">From intimate surprises to grand celebrations — we create magic for every occasion.</p>
+    </div>
+    <div class="occasions-grid" id="occasionsGrid">
+      <div class="occ-card reveal reveal-delay-1">
+        <img class="occ-card-img" src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&q=80" alt="Birthday Decoration" loading="lazy">
+        <div class="occ-card-body"><h3>Birthday</h3><p>Vibrant and joyful birthday setups</p><div class="occ-card-price">From ₹999</div></div>
+      </div>
+      <div class="occ-card reveal reveal-delay-2">
+        <img class="occ-card-img" src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80" alt="Anniversary Decoration" loading="lazy">
+        <div class="occ-card-body"><h3>Anniversary</h3><p>Romantic celebrations of love</p><div class="occ-card-price">From ₹1,999</div></div>
+      </div>
+      <div class="occ-card reveal reveal-delay-3">
+        <img class="occ-card-img" src="https://images.unsplash.com/photo-1519974719765-e6559eac2575?w=600&q=80" alt="Baby Shower" loading="lazy">
+        <div class="occ-card-body"><h3>Baby Shower</h3><p>Welcome the new arrival in style</p><div class="occ-card-price">From ₹2,499</div></div>
+      </div>
+      <div class="occ-card reveal reveal-delay-1">
+        <img class="occ-card-img" src="https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=600&q=80" alt="Wedding Decoration" loading="lazy">
+        <div class="occ-card-body"><h3>Wedding</h3><p>Elegant wedding decor setups</p><div class="occ-card-price">From ₹15,000</div></div>
+      </div>
+      <div class="occ-card reveal reveal-delay-2">
+        <img class="occ-card-img" src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=600&q=80" alt="Engagement" loading="lazy">
+        <div class="occ-card-body"><h3>Engagement</h3><p>Celebrate your commitment</p><div class="occ-card-price">From ₹5,000</div></div>
+      </div>
+      <div class="occ-card reveal reveal-delay-3">
+        <img class="occ-card-img" src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80" alt="Proposal" loading="lazy">
+        <div class="occ-card-body"><h3>Proposal</h3><p>Pop the question perfectly</p><div class="occ-card-price">From ₹2,499</div></div>
+      </div>
+      <div class="occ-card reveal reveal-delay-1">
+        <img class="occ-card-img" src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=600&q=80" alt="Corporate Event" loading="lazy">
+        <div class="occ-card-body"><h3>Corporate Event</h3><p>Professional event setups</p><div class="occ-card-price">From ₹15,000</div></div>
+      </div>
+      <div class="occ-card reveal reveal-delay-2">
+        <img class="occ-card-img" src="https://images.unsplash.com/photo-1603214857302-0f3c76f7b27b?w=600&q=80" alt="House Warming" loading="lazy">
+        <div class="occ-card-body"><h3>House Warming</h3><p>Warm your new home</p><div class="occ-card-price">From ₹1,499</div></div>
+      </div>
+      <div class="occ-card reveal reveal-delay-3">
+        <img class="occ-card-img" src="https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=600&q=80" alt="Haldi Decoration" loading="lazy">
+        <div class="occ-card-body"><h3>Haldi</h3><p>Vibrant pre-wedding ceremonies</p><div class="occ-card-price">From ₹4,999</div></div>
+      </div>
+      <div class="occ-card reveal reveal-delay-1">
+        <img class="occ-card-img" src="https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=600&q=80" alt="Kids Party" loading="lazy">
+        <div class="occ-card-body"><h3>Kids Theme Party</h3><p>Magical themes for little ones</p><div class="occ-card-price">From ₹1,999</div></div>
+      </div>
+      <div class="occ-card reveal reveal-delay-2">
+        <img class="occ-card-img" src="https://images.unsplash.com/photo-1530023367847-a683933f4172?w=600&q=80" alt="Festival Decoration" loading="lazy">
+        <div class="occ-card-body"><h3>Festival Decoration</h3><p>Celebrate festivals in style</p><div class="occ-card-price">From ₹2,999</div></div>
+      </div>
+      <div class="occ-card reveal reveal-delay-3">
+        <img class="occ-card-img" src="https://images.unsplash.com/photo-1481162854517-d9e353af867d?w=600&q=80" alt="Bride to Be" loading="lazy">
+        <div class="occ-card-body"><h3>Bride To Be</h3><p>Special pre-wedding celebration</p><div class="occ-card-price">From ₹3,999</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-white" id="categories">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Premium Categories</div>
+      <h2 class="section-title">Every Scale,<br>Every Occasion</h2>
+      <p class="section-subtitle">From intimate room setups to grand luxury events — find the perfect package for your celebration.</p>
+    </div>
+
+    <div class="filter-bar reveal" id="filterBar">
+      <select class="filter-select" id="filterCategory">
+        <option value="all">All Categories</option>
+        <option value="small">Small Scale</option>
+        <option value="medium">Medium Scale</option>
+        <option value="large">Large Scale</option>
+        <option value="luxury">Luxury Events</option>
+      </select>
+      <select class="filter-select" id="filterBudget">
+        <option value="all">Any Budget</option>
+        <option value="999-4999">₹999 - ₹4,999</option>
+        <option value="5000-15000">₹5,000 - ₹15,000</option>
+        <option value="15000-50000">₹15,000 - ₹50,000</option>
+        <option value="50000-500000">₹50,000+</option>
+      </select>
+      <select class="filter-select" id="filterOccasion">
+        <option value="all">Any Occasion</option>
+        <option value="birthday">Birthday</option>
+        <option value="wedding">Wedding</option>
+        <option value="anniversary">Anniversary</option>
+        <option value="proposal">Proposal</option>
+        <option value="corporate">Corporate</option>
+      </select>
+    </div>
+
+    <div class="categories" id="categoriesContainer">
+      <div class="cat-row reveal" data-category="small" data-budget="999-4999">
+        <div class="cat-info">
+          <div class="cat-label">Small Scale</div>
+          <h2 class="cat-title">Intimate Celebrations</h2>
+          <div class="cat-price">₹999 – ₹4,999</div>
+          <p class="cat-desc">Perfect for intimate surprises and close-knit celebrations. Our small-scale setups bring charm and elegance to any cozy space.</p>
+          <ul class="cat-list">
+            <li>Room Decoration</li>
+            <li>Surprise Decoration</li>
+            <li>Cake Table Setup</li>
+            <li>Kids Corner</li>
+            <li>Simple Birthday</li>
+          </ul>
+        </div>
+        <div class="cat-visual">
+          <div class="cat-badge">Starting ₹999</div>
+          <div class="cat-visual-img">
+            <img src="https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?w=800&q=80" alt="Small Scale Decoration" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-row reverse reveal" data-category="medium" data-budget="5000-15000">
+        <div class="cat-info">
+          <div class="cat-label">Medium Scale</div>
+          <h2 class="cat-title">Special Moments</h2>
+          <div class="cat-price">₹5,000 – ₹15,000</div>
+          <p class="cat-desc">Designed for celebrations that call for something extra special. These setups create memorable experiences without overwhelming the space.</p>
+          <ul class="cat-list">
+            <li>Baby Shower</li>
+            <li>Anniversary Setup</li>
+            <li>Terrace Decoration</li>
+            <li>Bride to Be Setup</li>
+            <li>Proposal Setup</li>
+          </ul>
+        </div>
+        <div class="cat-visual">
+          <div class="cat-badge">Starting ₹5,000</div>
+          <div class="cat-visual-img">
+            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80" alt="Medium Scale Decoration" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-row reveal" data-category="large" data-budget="15000-50000">
+        <div class="cat-info">
+          <div class="cat-label">Large Scale</div>
+          <h2 class="cat-title">Grand Celebrations</h2>
+          <div class="cat-price">₹15,000 – ₹50,000</div>
+          <p class="cat-desc">For events that make a statement. Our large-scale creations transform venues into breathtaking experiences that guests will remember.</p>
+          <ul class="cat-list">
+            <li>Wedding Decoration</li>
+            <li>Engagement Setup</li>
+            <li>Haldi Ceremony</li>
+            <li>Corporate Setup</li>
+            <li>Stage Decoration</li>
+          </ul>
+        </div>
+        <div class="cat-visual">
+          <div class="cat-badge">Starting ₹15,000</div>
+          <div class="cat-visual-img">
+            <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800&q=80" alt="Large Scale Decoration" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-row reverse reveal" data-category="luxury" data-budget="50000-500000">
+        <div class="cat-info">
+          <div class="cat-label">Luxury Events</div>
+          <h2 class="cat-title">Extraordinary Experiences</h2>
+          <div class="cat-price">₹50,000 – ₹5,00,000+</div>
+          <p class="cat-desc">Where opulence meets artistry. Our luxury division creates show-stopping environments for the most discerning clients and prestigious events.</p>
+          <ul class="cat-list">
+            <li>Luxury Weddings</li>
+            <li>Destination Setups</li>
+            <li>Premium Stage Decor</li>
+            <li>Celebrity Events</li>
+            <li>Corporate Conferences</li>
+          </ul>
+        </div>
+        <div class="cat-visual">
+          <div class="cat-badge">Luxury</div>
+          <div class="cat-visual-img">
+            <img src="https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800&q=80" alt="Luxury Event Decoration" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="city-marquee section-light">
+  <div class="city-track" id="cityTrack">
+    <a class="city-chip">Pune</a><a class="city-chip">Pimpri</a><a class="city-chip">Hinjewadi</a><a class="city-chip">Wakad</a><a class="city-chip">Baner</a><a class="city-chip">Kharadi</a><a class="city-chip">Hadapsar</a><a class="city-chip">Talegaon</a><a class="city-chip">Lonavala</a><a class="city-chip">Satara</a><a class="city-chip">Ahmednagar</a><a class="city-chip">Baramati</a><a class="city-chip">Chakan</a>
+    <a class="city-chip">Pune</a><a class="city-chip">Pimpri</a><a class="city-chip">Hinjewadi</a><a class="city-chip">Wakad</a><a class="city-chip">Baner</a><a class="city-chip">Kharadi</a><a class="city-chip">Hadapsar</a><a class="city-chip">Talegaon</a><a class="city-chip">Lonavala</a><a class="city-chip">Satara</a><a class="city-chip">Ahmednagar</a><a class="city-chip">Baramati</a><a class="city-chip">Chakan</a>
+  </div>
+</div>
+
+<section class="section section-light" id="gallery">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Gallery</div>
+      <h2 class="section-title">Our Masterpieces</h2>
+      <p class="section-subtitle">Each decoration tells a story. Browse through our recent creations.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item wide reveal reveal-delay-1">
+        <img src="https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=800&q=80" alt="Gallery" loading="lazy">
+        <div class="gallery-overlay"><span>Wedding Reception Setup</span></div>
+      </div>
+      <div class="gallery-item tall reveal reveal-delay-2">
+        <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&q=80" alt="Gallery" loading="lazy">
+        <div class="gallery-overlay"><span>Birthday Celebration</span></div>
+      </div>
+      <div class="gallery-item reveal reveal-delay-3">
+        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80" alt="Gallery" loading="lazy">
+        <div class="gallery-overlay"><span>Proposal Setup</span></div>
+      </div>
+      <div class="gallery-item reveal reveal-delay-1">
+        <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=600&q=80" alt="Gallery" loading="lazy">
+        <div class="gallery-overlay"><span>Engagement Decor</span></div>
+      </div>
+      <div class="gallery-item reveal reveal-delay-2">
+        <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=600&q=80" alt="Gallery" loading="lazy">
+        <div class="gallery-overlay"><span>Corporate Event</span></div>
+      </div>
+      <div class="gallery-item wide reveal reveal-delay-3">
+        <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800&q=80" alt="Gallery" loading="lazy">
+        <div class="gallery-overlay"><span>Grand Wedding Setup</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-white" id="reviews">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Testimonials</div>
+      <h2 class="section-title">What Our<br>Clients Say</h2>
+      <p class="section-subtitle">Real stories from real celebrations we've been honored to be part of.</p>
+    </div>
+    <div class="testimonials reveal">
+      <div class="testimonials-track">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Absolutely stunning decoration! They transformed our living room into a magical wonderland for my daughter's birthday. Every detail was perfect."</p>
+          <div class="testimonial-author">
+            <img class="testimonial-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Avatar">
+            <div><div class="testimonial-name">Priya Sharma</div><div class="testimonial-role">Birthday Decoration, Pune</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The proposal setup was absolutely breathtaking. She said yes! The team went above and beyond to create the perfect romantic atmosphere."</p>
+          <div class="testimonial-author">
+            <img class="testimonial-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Avatar">
+            <div><div class="testimonial-name">Rahul Mehta</div><div class="testimonial-role">Proposal Setup, Hinjewadi</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"We hired them for our wedding decoration and they exceeded every expectation. The mandap was a dream come true. Truly premium service."</p>
+          <div class="testimonial-author">
+            <img class="testimonial-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Avatar">
+            <div><div class="testimonial-name">Ananya Patel</div><div class="testimonial-role">Wedding Decoration, Lonavala</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Professional, creative, and incredibly responsive. Our corporate event looked world-class. Highly recommend for any business function."</p>
+          <div class="testimonial-author">
+            <img class="testimonial-avatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="Avatar">
+            <div><div class="testimonial-name">Vikram Joshi</div><div class="testimonial-role">Corporate Event, Baner</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The baby shower decoration was so elegant and cute! Every guest complimented the setup. Thank you for making this day so special."</p>
+          <div class="testimonial-author">
+            <img class="testimonial-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80" alt="Avatar">
+            <div><div class="testimonial-name">Neha Kapoor</div><div class="testimonial-role">Baby Shower, Wakad</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Absolutely stunning decoration! They transformed our living room into a magical wonderland for my daughter's birthday. Every detail was perfect."</p>
+          <div class="testimonial-author">
+            <img class="testimonial-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Avatar">
+            <div><div class="testimonial-name">Priya Sharma</div><div class="testimonial-role">Birthday Decoration, Pune</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="reel-section section-dark">
+  <div class="container" style="margin-bottom:40px;">
+    <div class="section-header reveal">
+      <div class="section-label">Instagram Reels</div>
+      <h2 class="section-title" style="color:var(--white);">Watch Our Magic</h2>
+      <p class="section-subtitle" style="color:var(--gray-400);">See our decorations come to life in motion.</p>
+    </div>
+  </div>
+  <div class="reels-track" id="reelsTrack">
+    <div class="reel-card"><img src="https://images.unsplash.com/photo-1558636508-e0db3814bd1d?w=400&q=80" alt="Reel"><div class="reel-play"><div class="reel-play-icon">▶</div></div></div>
+    <div class="reel-card"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=400&q=80" alt="Reel"><div class="reel-play"><div class="reel-play-icon">▶</div></div></div>
+    <div class="reel-card"><img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&q=80" alt="Reel"><div class="reel-play"><div class="reel-play-icon">▶</div></div></div>
+    <div class="reel-card"><img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&q=80" alt="Reel"><div class="reel-play"><div class="reel-play-icon">▶</div></div></div>
+    <div class="reel-card"><img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=400&q=80" alt="Reel"><div class="reel-play"><div class="reel-play-icon">▶</div></div></div>
+    <div class="reel-card"><img src="https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=400&q=80" alt="Reel"><div class="reel-play"><div class="reel-play-icon">▶</div></div></div>
+    <div class="reel-card"><img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=400&q=80" alt="Reel"><div class="reel-play"><div class="reel-play-icon">▶</div></div></div>
+  </div>
+</section>
+
+<section class="section section-white" id="pricing">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Packages</div>
+      <h2 class="section-title">Choose Your<br>Perfect Plan</h2>
+      <p class="section-subtitle">Transparent pricing with no hidden costs. Every package includes setup, materials, and professional service.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;">
+      <div class="pricing-card reveal reveal-delay-1">
+        <div class="cat-label">Small Scale</div>
+        <h3>Essential</h3>
+        <div class="price-range">₹999–₹4,999</div>
+        <ul>
+          <li>Room decoration</li>
+          <li>Surprise decoration</li>
+          <li>Cake table setup</li>
+          <li>Basic balloon arch</li>
+          <li>Setup within 2 hours</li>
+        </ul>
+        <button class="btn btn-dark" style="width:100%;justify-content:center;" onclick="openBooking()">Book Now</button>
+      </div>
+      <div class="pricing-card featured reveal reveal-delay-2">
+        <div class="cat-label">Most Popular</div>
+        <h3>Celebration</h3>
+        <div class="price-range">₹5,000–₹15,000</div>
+        <ul>
+          <li>Baby shower setup</li>
+          <li>Anniversary decoration</li>
+          <li>Terrace decoration</li>
+          <li>Bride to be setup</li>
+          <li>Proposal setup</li>
+          <li>Premium balloon arch</li>
+          <li>Setup within 3 hours</li>
+        </ul>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="openBooking()">Book Now</button>
+      </div>
+      <div class="pricing-card reveal reveal-delay-3">
+        <div class="cat-label">Large Scale</div>
+        <h3>Grand</h3>
+        <div class="price-range">₹15,000–₹50,000</div>
+        <ul>
+          <li>Wedding decoration</li>
+          <li>Engagement setup</li>
+          <li>Haldi ceremony</li>
+          <li>Corporate setup</li>
+          <li>Stage decoration</li>
+          <li>Custom themed setup</li>
+          <li>Team of 5+ decorators</li>
+        </ul>
+        <button class="btn btn-dark" style="width:100%;justify-content:center;" onclick="openBooking()">Book Now</button>
+      </div>
+      <div class="pricing-card reveal reveal-delay-4">
+        <div class="cat-label">Luxury</div>
+        <h3>Premium</h3>
+        <div class="price-range">₹50,000+</div>
+        <ul>
+          <li>Luxury weddings</li>
+          <li>Destination setups</li>
+          <li>Premium stage decor</li>
+          <li>Celebrity events</li>
+          <li>Corporate conferences</li>
+          <li>Dedicated designer</li>
+          <li>Premium imported materials</li>
+        </ul>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="openBooking()">Book Now</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-light" id="blog">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Journal</div>
+      <h2 class="section-title">Decoration<br>Inspiration</h2>
+      <p class="section-subtitle">Ideas, trends, and tips to help you plan your perfect celebration.</p>
+    </div>
+    <div class="blog-grid">
+      <div class="blog-card reveal reveal-delay-1">
+        <img class="blog-card-img" src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&q=80" alt="Blog" loading="lazy">
+        <div class="blog-card-body">
+          <div class="blog-card-tag">Inspiration</div>
+          <h3>10 Stunning Birthday Decoration Ideas for 2025</h3>
+          <p>From minimalist chic to vibrant themes — discover the trends that are defining birthday celebrations this year.</p>
+        </div>
+      </div>
+      <div class="blog-card reveal reveal-delay-2">
+        <img class="blog-card-img" src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80" alt="Blog" loading="lazy">
+        <div class="blog-card-body">
+          <div class="blog-card-tag">Trends</div>
+          <h3>The Art of Romantic Balloon Decorations</h3>
+          <p>How to create the perfect atmosphere for proposals, anniversaries, and romantic surprises.</p>
+        </div>
+      </div>
+      <div class="blog-card reveal reveal-delay-3">
+        <img class="blog-card-img" src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600&q=80" alt="Blog" loading="lazy">
+        <div class="blog-card-body">
+          <div class="blog-card-tag">Guide</div>
+          <h3>Planning a Luxury Wedding in Pune: Complete Guide</h3>
+          <p>Everything you need to know about creating an unforgettable luxury wedding experience.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-white" id="faq">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Frequently Asked<br>Questions</h2>
+      <p class="section-subtitle">Everything you need to know about our services.</p>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q">What areas do you serve?<span class="faq-q-icon"></span></button>
+        <div class="faq-a"><p>We serve all locations within 160 km of Pune, including Pimpri, Hinjewadi, Wakad, Baner, Kharadi, Hadapsar, Talegaon, Lonavala, Satara, Ahmednagar, Baramati, Chakan, and surrounding areas. Travel charges may apply for locations beyond 20 km.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How far in advance should I book?<span class="faq-q-icon"></span></button>
+        <div class="faq-a"><p>We recommend booking at least 3-5 days in advance for small setups and 1-2 weeks for large or luxury events. However, we do accommodate last-minute bookings subject to availability.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What is included in the decoration price?<span class="faq-q-icon"></span></button>
+        <div class="faq-a"><p>All prices include the cost of materials, setup, and basic styling. Premium add-ons like LED lights, fog machines, neon signs, and flowers may cost extra. Each package clearly lists inclusions and exclusions.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Do you offer customization?<span class="faq-q-icon"></span></button>
+        <div class="faq-a"><p>Absolutely! Every decoration is tailored to your preferences. We work with you to choose colors, themes, and elements that match your vision. Our AI assistant can help suggest ideas based on your budget and occasion.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What is the cancellation policy?<span class="faq-q-icon"></span></button>
+        <div class="faq-a"><p>Cancellations made 48+ hours before the event receive a full refund. Cancellations within 24-48 hours receive a 50% refund. Cancellations within 24 hours are non-refundable. Rescheduling is free if done 24+ hours in advance.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How long does setup take?<span class="faq-q-icon"></span></button>
+        <div class="faq-a"><p>Setup time depends on the package. Small setups take 1-2 hours, medium setups take 2-4 hours, large setups take 4-6 hours, and luxury events may take 8-12 hours or more depending on complexity.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Do you accept advance payments?<span class="faq-q-icon"></span></button>
+        <div class="faq-a"><p>Yes, we offer flexible payment options: 20% advance to confirm your booking, 50% advance for medium to large setups, or 100% full payment with a special discount. We accept UPI, cards, net banking, and all major payment methods.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" id="contact">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>Mahek<span>.</span></h3>
+        <p>Premium balloon decoration services across Pune and nearby cities. Transforming every celebration into a memory since 2020.</p>
+        <div style="margin-top:16px;font-family:var(--font-ui);font-size:14px;color:var(--gray-400);">
+          <p>📞 +91 98765 43210</p>
+          <p>✉️ hello@mahekdecorators.com</p>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#occasions">Occasions</a></li>
+          <li><a href="#categories">Packages</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#blog">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">Birthday Decoration</a></li>
+          <li><a href="#">Wedding Decoration</a></li>
+          <li><a href="#">Corporate Events</a></li>
+          <li><a href="#">Proposal Setup</a></li>
+          <li><a href="#">Luxury Events</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Cities</h4>
+        <ul>
+          <li><a href="#">Pune</a></li>
+          <li><a href="#">Hinjewadi</a></li>
+          <li><a href="#">Wakad</a></li>
+          <li><a href="#">Baner</a></li>
+          <li><a href="#">Lonavala</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Mahek Decorators. All rights reserved.</span>
+      <div class="footer-socials">
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="Facebook">FB</a>
+        <a href="#" aria-label="YouTube">YT</a>
+        <a href="#" aria-label="WhatsApp">WA</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ai-chat-btn" id="aiChatBtn" onclick="toggleChat()">✦</div>
+<div class="ai-chat-panel" id="aiChatPanel">
+  <div class="ai-chat-header">
+    <div><h3>AI Decor Assistant</h3><span>Ask me anything!</span></div>
+    <button class="ai-chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="ai-chat-messages" id="aiMessages">
+    <div class="ai-msg bot">Hi! I'm your decoration assistant. Tell me your occasion and budget, and I'll suggest the perfect setup for you! 🎈</div>
+  </div>
+  <div class="ai-chat-input">
+    <input type="text" id="aiInput" placeholder="e.g. Anniversary under ₹5000..." onkeydown="if(event.key==='Enter')sendAiMessage()">
+    <button onclick="sendAiMessage()">➤</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeBooking()">✕</button>
+    <h2>Book Your Decoration</h2>
+    <div class="booking-steps">
+      <div class="booking-step">
+        <h4>Step 1</h4>
+        <div class="step-title">Select Package</div>
+        <div class="booking-options">
+          <button class="booking-option" onclick="selectBooking(this)">Essential (₹999-₹4,999)</button>
+          <button class="booking-option" onclick="selectBooking(this)">Celebration (₹5,000-₹15,000)</button>
+          <button class="booking-option" onclick="selectBooking(this)">Grand (₹15,000-₹50,000)</button>
+          <button class="booking-option" onclick="selectBooking(this)">Premium (₹50,000+)</button>
+        </div>
+      </div>
+      <div class="booking-step">
+        <h4>Step 2</h4>
+        <div class="step-title">Choose City</div>
+        <div class="booking-options">
+          <button class="booking-option" onclick="selectBooking(this)">Pune</button>
+          <button class="booking-option" onclick="selectBooking(this)">Pimpri</button>
+          <button class="booking-option" onclick="selectBooking(this)">Hinjewadi</button>
+          <button class="booking-option" onclick="selectBooking(this)">Wakad</button>
+          <button class="booking-option" onclick="selectBooking(this)">Baner</button>
+          <button class="booking-option" onclick="selectBooking(this)">Kharadi</button>
+          <button class="booking-option" onclick="selectBooking(this)">Other</button>
+        </div>
+      </div>
+      <div class="booking-step">
+        <h4>Step 3</h4>
+        <div class="step-title">Select Date & Time</div>
+        <input type="date" class="booking-field" style="margin-bottom:8px;">
+        <input type="time" class="booking-field">
+      </div>
+      <div class="booking-step">
+        <h4>Step 4</h4>
+        <div class="step-title">Your Details</div>
+        <input type="text" class="booking-field" placeholder="Full Name" style="margin-bottom:8px;">
+        <input type="tel" class="booking-field" placeholder="Phone Number" style="margin-bottom:8px;">
+        <input type="email" class="booking-field" placeholder="Email Address" style="margin-bottom:8px;">
+        <textarea class="booking-field" placeholder="Special requests or message..." rows="3"></textarea>
+      </div>
+      <div class="booking-step">
+        <h4>Step 5</h4>
+        <div class="step-title">Select Add-ons</div>
+        <div class="booking-options" style="margin-bottom:8px;">
+          <button class="booking-option" onclick="selectBooking(this)">Cake +₹499</button>
+          <button class="booking-option" onclick="selectBooking(this)">LED Lights +₹299</button>
+          <button class="booking-option" onclick="selectBooking(this)">Rose Petals +₹199</button>
+          <button class="booking-option" onclick="selectBooking(this)">Photo Frame +₹349</button>
+        </div>
+        <div class="booking-options">
+          <button class="booking-option" onclick="selectBooking(this)">Neon Sign +₹999</button>
+          <button class="booking-option" onclick="selectBooking(this)">Fog Machine +₹599</button>
+          <button class="booking-option" onclick="selectBooking(this)">Flowers +₹799</button>
+          <button class="booking-option" onclick="selectBooking(this)">Gift Hamper +₹499</button>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;" onclick="submitBooking()">Confirm Booking →</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="successModal">
+  <div class="modal" style="text-align:center;">
+    <button class="modal-close" onclick="document.getElementById('successModal').classList.remove('open')">✕</button>
+    <div style="font-size:48px;margin-bottom:16px;">✓</div>
+    <h2 style="color:var(--accent-dark);">Booking Confirmed!</h2>
+    <p style="font-family:var(--font-ui);color:var(--gray-500);line-height:1.7;margin-bottom:24px;">We've received your booking request. Our team will contact you within 30 minutes to confirm the details.</p>
+    <button class="btn btn-primary" onclick="document.getElementById('successModal').classList.remove('open')">Great!</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.28/bundled/lenis.min.js"></script>
+<script>
+// ===== LENIS SMOOTH SCROLL =====
+const lenis = new Lenis({
+  duration: 1.4,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  orientation: 'vertical',
+  smoothWheel: true,
+  wheelMultiplier: 0.8,
+  touchMultiplier: 1.2,
+});
+function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+requestAnimationFrame(raf);
+
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time) => lenis.raf(time * 1000));
+gsap.ticker.lagSmoothing(0);
+
+// ===== LOADING SCREEN =====
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 1500);
+});
+
+// ===== NAVIGATION =====
+const nav = document.getElementById('nav');
+const navMobileBtn = document.getElementById('navMobileBtn');
+const navLinks = document.getElementById('navLinks');
+
+navMobileBtn.addEventListener('click', () => {
+  navMobileBtn.classList.toggle('active');
+  navLinks.classList.toggle('open');
+});
+
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navMobileBtn.classList.remove('active');
+    navLinks.classList.remove('open');
+  });
+});
+
+lenis.on('scroll', (e) => {
+  if (e.velocity > 0.5) {
+    nav.classList.add('scrolled');
+  } else if (window.scrollY > 80) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+});
+
+// ===== SCROLL STORYTELLING (GSAP) =====
+gsap.registerPlugin(ScrollTrigger);
+
+const storyPin = document.getElementById('storyPin');
+const storyBalloon = document.getElementById('storyBalloon');
+const storyRibbon1 = document.getElementById('storyRibbon1');
+const storyRibbon2 = document.getElementById('storyRibbon2');
+const storyArch1 = document.getElementById('storyArch1');
+const storyArch2 = document.getElementById('storyArch2');
+const storyDeco1 = document.getElementById('storyDeco1');
+const storyDeco2 = document.getElementById('storyDeco2');
+const scenes = [
+  document.getElementById('scene1'),
+  document.getElementById('scene2'),
+  document.getElementById('scene3'),
+  document.getElementById('scene4'),
+  document.getElementById('scene5'),
+];
+
+ScrollTrigger.create({
+  trigger: storyPin,
+  start: 'top top',
+  end: 'bottom bottom',
+  pin: true,
+  pinSpacing: false,
+});
+
+const tl = gsap.timeline({
+  scrollTrigger: {
+    trigger: storyPin,
+    start: 'top top',
+    end: '+=300%',
+    scrub: 1.2,
+    invalidateOnRefresh: true,
+  }
+});
+
+// Scene 1: Balloon rises and floats
+tl.fromTo(storyBalloon, { opacity: 0, scale: 0.5, y: 100 }, { opacity: 1, scale: 1, y: -50, duration: 1, ease: 'power2.out' })
+  .to(storyBalloon, { y: -80, duration: 0.5, ease: 'none' }, '+=0.3');
+
+// Scene 2: Ribbons appear
+tl.to(storyRibbon1, { opacity: 1, scaleX: 1, width: 200, duration: 0.6, ease: 'back.out(1.7)' }, '+=0.2')
+  .to(storyRibbon2, { opacity: 1, scaleX: 1, width: 180, duration: 0.6, ease: 'back.out(1.7)' }, '-=0.3');
+
+// Scene 3: Arches form
+tl.to(storyArch1, { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' }, '+=0.3')
+  .to(storyArch2, { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.4')
+  .to(storyRibbon1, { opacity: 0, duration: 0.3 }, '-=0.3')
+  .to(storyRibbon2, { opacity: 0, duration: 0.3 }, '-=0.3');
+
+// Scene 4: Decorations bloom
+tl.to(storyDeco1, { opacity: 1, scale: 3, duration: 0.8, ease: 'power2.out' }, '+=0.3')
+  .to(storyDeco2, { opacity: 1, scale: 3, duration: 0.8, ease: 'power2.out' }, '-=0.4')
+  .to(storyArch1, { opacity: 0.3, duration: 0.3 }, '-=0.3')
+  .to(storyArch2, { opacity: 0.3, duration: 0.3 }, '-=0.3');
+
+// Scene 5: Complete celebration
+tl.to(storyDeco1, { scale: 5, opacity: 0.2, duration: 0.6 }, '+=0.2')
+  .to(storyDeco2, { scale: 5, opacity: 0.2, duration: 0.6 }, '-=0.5')
+  .to(storyBalloon, { opacity: 0, duration: 0.4 }, '-=0.3')
+  .to('#storyContent', { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '-=0.2');
+
+// Text scenes
+scenes.forEach((scene, i) => {
+  const start = i / scenes.length;
+  const end = (i + 1) / scenes.length;
+  gsap.fromTo(scene,
+    { opacity: 0, y: 20 },
+    {
+      opacity: 1, y: 0, duration: 0.01,
+      scrollTrigger: {
+        trigger: storyPin,
+        start: start * 100 + '%',
+        end: end * 100 + '%',
+        scrub: 0.5,
+      }
+    }
+  );
+  gsap.to(scene, {
+    opacity: 0, y: -20, duration: 0.01,
+    scrollTrigger: {
+      trigger: storyPin,
+      start: (end - 0.1) * 100 + '%',
+      end: end * 100 + '%',
+      scrub: 0.5,
+    }
+  });
+});
+
+// ===== REVEAL ANIMATIONS =====
+const revealElements = document.querySelectorAll('.reveal');
+revealElements.forEach((el) => {
+  ScrollTrigger.create({
+    trigger: el,
+    start: 'top 90%',
+    onEnter: () => el.classList.add('visible'),
+    once: true,
+  });
+});
+
+// ===== GALLERY ITEM PARALLAX =====
+document.querySelectorAll('.gallery-item img, .cat-visual-img img').forEach(img => {
+  gsap.fromTo(img, { y: -20 }, {
+    y: 20,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: img.closest('.gallery-item') || img.closest('.cat-visual'),
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: 1,
+    }
+  });
+});
+
+// ===== FILTER SYSTEM =====
+function filterCategories() {
+  const cat = document.getElementById('filterCategory').value;
+  const budget = document.getElementById('filterBudget').value;
+  const occasion = document.getElementById('filterOccasion').value;
+  document.querySelectorAll('.cat-row').forEach(row => {
+    const c = row.dataset.category;
+    const b = row.dataset.budget;
+    let show = true;
+    if (cat !== 'all' && c !== cat) show = false;
+    if (budget !== 'all' && b !== budget) show = false;
+    gsap.to(row, { opacity: show ? 1 : 0.2, scale: show ? 1 : 0.95, duration: 0.5, ease: 'power2.out' });
+    row.style.pointerEvents = show ? 'auto' : 'none';
+  });
+}
+
+document.getElementById('filterCategory').addEventListener('change', filterCategories);
+document.getElementById('filterBudget').addEventListener('change', filterCategories);
+document.getElementById('filterOccasion').addEventListener('change', filterCategories);
+
+// ===== FAQ ACCORDION =====
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.closest('.faq-item');
+    const isActive = item.classList.contains('active');
+    document.querySelectorAll('.faq-item.active').forEach(i => i.classList.remove('active'));
+    if (!isActive) item.classList.add('active');
+  });
+});
+
+// ===== BOOKING MODAL =====
+function openBooking() {
+  document.getElementById('bookingModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeBooking() {
+  document.getElementById('bookingModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function selectBooking(el) {
+  const parent = el.parentElement;
+  parent.querySelectorAll('.booking-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function submitBooking() {
+  closeBooking();
+  setTimeout(() => {
+    document.getElementById('successModal').classList.add('open');
+  }, 300);
+}
+
+document.getElementById('bookingModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('bookingModal')) closeBooking();
+});
+
+// ===== AI CHAT =====
+let chatOpen = false;
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById('aiChatPanel').classList.toggle('open', chatOpen);
+}
+
+const aiResponses = [
+  { keywords: ['birthday', 'bday'], response: 'For birthday decorations under ₹5,000, I recommend our Essential Birthday Package starting at ₹999! Includes room decoration, cake table setup, and a beautiful balloon arch. For a grander celebration, our Celebration Package at ₹5,000-₹15,000 includes themed decor and premium balloons.' },
+  { keywords: ['anniversary', 'anniversary'], response: 'Our Romantic Anniversary Packages start at ₹1,999! For an intimate setup, try our Small Scale package with rose petals, balloons, and LED candles. The premium package at ₹5,000+ includes a photo wall and personalized name board.' },
+  { keywords: ['proposal', 'propose'], response: 'Planning a proposal? Our Proposal Setup starting at ₹2,499 includes a dreamy balloon arch, rose petals pathway, LED lights, and a photo frame. Add a neon sign with your message for ₹999 more!' },
+  { keywords: ['wedding', 'marriage'], response: 'For wedding decorations, we offer three tiers: Essential Wedding (₹15,000-₹25,000), Premium Wedding (₹25,000-₹50,000), and Luxury Wedding (₹50,000+). Each includes mandap decoration, entrance arch, stage setup, and more.' },
+  { keywords: ['baby shower'], response: 'Baby shower decorations start at ₹2,499! Our packages include pastel balloon arches, themed centerpieces, cake table setup, and decorative banners. The premium package includes a photo backdrop and gift table.' },
+  { keywords: ['corporate', 'office', 'business'], response: 'Corporate event decoration starts at ₹15,000. We offer stage decoration, entrance branding, backdrop setup, and themed corporate environments. Our team can handle events for 50-500+ attendees.' },
+  { keywords: ['small', 'budget', 'cheap', 'low'], response: 'Looking for budget-friendly options? Our Small Scale packages start from just ₹999! Perfect for room decoration, surprise setups, and intimate celebrations. You get premium quality at an affordable price.' },
+  { keywords: ['luxury', 'premium', 'high end', 'expensive'], response: 'Our Luxury Events division handles premium celebrations from ₹50,000 to ₹5,00,000+. Includes imported balloons, custom themes, dedicated designer, and full-service coordination. Perfect for luxury weddings and high-profile events.' },
+  { keywords: ['hallo', 'diwali', 'festival', 'holi'], response: 'Festival decorations start at ₹2,999! We create stunning festive setups for Diwali, Holi, Ganesh Chaturthi, and more. Includes themed balloons, floral arrangements, and traditional decor elements.' },
+];
+
+function sendAiMessage() {
+  const input = document.getElementById('aiInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  const messages = document.getElementById('aiMessages');
+  const userMsg = document.createElement('div');
+  userMsg.className = 'ai-msg user';
+  userMsg.textContent = text;
+  messages.appendChild(userMsg);
+  messages.scrollTop = messages.scrollHeight;
+
+  setTimeout(() => {
+    let response = "That sounds wonderful! I'd recommend browsing our packages above — we have options for every budget and occasion. Could you tell me more about your specific needs?";
+    const lower = text.toLowerCase();
+    for (const item of aiResponses) {
+      if (item.keywords.some(k => lower.includes(k))) {
+        response = item.response;
+        break;
+      }
+    }
+    if (lower.includes('500') || lower.includes('1000') || lower.includes('2000') || lower.includes('3000') || lower.includes('4000')) {
+      response = "Great budget! Our Small Scale decorations (₹999-₹4,999) would be perfect for you. We have options for birthdays, anniversaries, and surprise decorations within this range. Would you like to see specific options?";
+    }
+    if (lower.includes('5000') || lower.includes('10000') || lower.includes('15000')) {
+      response = "Excellent! Our Medium Scale packages (₹5,000-₹15,000) are our most popular. Great for baby showers, proposals, and anniversary setups. Premium quality with elegant designs. Would you like to book a consultation?";
+    }
+    if (lower.includes('book') || lower.includes('appointment') || lower.includes('contact')) {
+      response = "I'd love to help you book! You can click the 'Book Now' button above or call us directly at +91 98765 43210. Our team will help you create the perfect celebration! 🎈";
+    }
+    const botMsg = document.createElement('div');
+    botMsg.className = 'ai-msg bot';
+    botMsg.innerHTML = response.replace(/\n/g, '<br>');
+    messages.appendChild(botMsg);
+    messages.scrollTop = messages.scrollHeight;
+  }, 800);
+}
+
+// ===== SMOOTH ANCHOR LINKS =====
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    const href = a.getAttribute('href');
+    if (href === '#') return;
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if (target) {
+      lenis.scrollTo(target, { offset: -80, duration: 1.4 });
+    }
+  });
+});
+
+// ===== COUNTER ANIMATION =====
+let counted = false;
+ScrollTrigger.create({
+  trigger: '.footer',
+  start: 'top 90%',
+  onEnter: () => {
+    if (!counted) {
+      counted = true;
+      // Simple counter animation for stats could go here
+    }
+  },
+  once: true,
+});
+
+console.log('%cMAHEK DECORATOR', 'font-size:24px;font-weight:bold;color:#D4AF37;');
+console.log('%cPremium Balloon Decorations — Pune', 'font-size:14px;color:#6B6B68;');
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const canvas = document.getElementById('hero-canvas');
+const hero = document.getElementById('hero');
+if (!canvas || !hero) throw new Error('Hero elements not found');
+
+// === SCENE ===
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x050505);
+scene.fog = new THREE.FogExp2(0x050505, 0.025);
+
+const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 0, 7);
+
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: true,
+  powerPreference: 'high-performance',
+});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+
+// Post-processing
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloomPass = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight), 0.35, 0.6, 0.05
+);
+composer.addPass(bloomPass);
+composer.addPass(new OutputPass());
+
+// Environment map
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+pmrem.dispose();
+
+// Lights
+const ambient = new THREE.AmbientLight(0x222244, 0.5);
+scene.add(ambient);
+const key = new THREE.DirectionalLight(0x7a1fff, 1.8);
+key.position.set(2, 3, 4);
+scene.add(key);
+const fill = new THREE.DirectionalLight(0xd4af37, 0.6);
+fill.position.set(-3, 1, -2);
+scene.add(fill);
+const rim = new THREE.DirectionalLight(0x7a1fff, 0.8);
+rim.position.set(-1, -2, -3);
+scene.add(rim);
+
+// === BALLOON GEOMETRY ===
+function makeBalloonGeo() {
+  const pts = [];
+  const seg = 48;
+  for (let i = 0; i <= seg; i++) {
+    const t = i / seg;
+    const a = t * Math.PI;
+    const r = Math.sin(a) * (0.7 + Math.sin(a * 2) * 0.12);
+    const y = Math.cos(a) * 0.95 - 0.15;
+    const pinch = i > seg * 0.88 ? 1 - (i - seg * 0.88) / (seg * 0.12) * 0.5 : 1;
+    pts.push(new THREE.Vector2(r * pinch, y));
+  }
+  return new THREE.LatheGeometry(pts, 48);
+}
+const bGeo = makeBalloonGeo();
+
+// Outer glass balloon
+const glassMat = new THREE.MeshPhysicalMaterial({
+  color: 0xffffff,
+  metalness: 0.0,
+  roughness: 0.03,
+  transparent: true,
+  opacity: 0.3,
+  clearcoat: 1.0,
+  clearcoatRoughness: 0.05,
+  transmission: 0.6,
+  thickness: 2.0,
+  envMapIntensity: 2.5,
+  side: THREE.DoubleSide,
+  depthWrite: false,
+});
+const balloon = new THREE.Mesh(bGeo, glassMat);
+balloon.position.y = 0.15;
+
+// Inner purple energy
+const innerMat = new THREE.MeshPhysicalMaterial({
+  color: 0x7a1fff,
+  emissive: 0x7a1fff,
+  emissiveIntensity: 0.5,
+  transparent: true,
+  opacity: 0.3,
+  roughness: 0.2,
+  metalness: 0.0,
+  depthWrite: false,
+});
+const innerBalloon = new THREE.Mesh(bGeo.clone(), innerMat);
+innerBalloon.scale.set(0.72, 0.72, 0.72);
+
+// Gold edges
+const goldEdges = new THREE.LineSegments(
+  new THREE.EdgesGeometry(bGeo),
+  new THREE.LineBasicMaterial({ color: 0xd4af37, transparent: true, opacity: 0.2 })
+);
+
+// Knot
+const knotMat = new THREE.MeshPhysicalMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.15 });
+const knot = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 8), knotMat);
+knot.position.set(0, -0.88, 0);
+balloon.add(knot);
+
+innerBalloon.renderOrder = 1;
+balloon.renderOrder = 2;
+goldEdges.renderOrder = 3;
+
+const balloonGroup = new THREE.Group();
+balloonGroup.add(balloon);
+balloonGroup.add(innerBalloon);
+balloonGroup.add(goldEdges);
+scene.add(balloonGroup);
+
+// === TYPOGRAPHY ===
+function makeTypography() {
+  const c = document.createElement('canvas');
+  c.width = 2048; c.height = 1024;
+  const ctx = c.getContext('2d');
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const font = 'bold 140px "Clash Display", system-ui, sans-serif';
+
+  ctx.shadowColor = 'rgba(212,175,55,0.3)';
+  ctx.shadowBlur = 80;
+  ctx.font = font;
+  ctx.fillStyle = 'rgba(212,175,55,0.07)';
+  ctx.filter = 'blur(10px)';
+  ctx.fillText('MAHEK DECORATOR', c.width/2, c.height/2);
+
+  ctx.shadowColor = 'rgba(122,31,255,0.2)';
+  ctx.shadowBlur = 60;
+  ctx.filter = 'blur(5px)';
+  ctx.fillStyle = 'rgba(122,31,255,0.05)';
+  ctx.fillText('MAHEK DECORATOR', c.width/2, c.height/2 + 1);
+
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+  ctx.filter = 'none';
+  ctx.fillStyle = 'rgba(255,255,255,0.03)';
+  ctx.fillText('MAHEK DECORATOR', c.width/2, c.height/2);
+
+  ctx.strokeStyle = 'rgba(212,175,55,0.12)';
+  ctx.lineWidth = 1.5;
+  ctx.strokeText('MAHEK DECORATOR', c.width/2, c.height/2);
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.needsUpdate = true;
+  const mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(18, 9),
+    new THREE.MeshBasicMaterial({
+      map: tex, transparent: true, opacity: 0.4,
+      depthWrite: false, side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending,
+    })
+  );
+  mesh.position.set(0, 0.15, -4.5);
+  return mesh;
+}
+const typography = makeTypography();
+scene.add(typography);
+
+// === PARTICLES ===
+function makeParticles(count) {
+  const pos = new Float32Array(count * 3);
+  const col = new Float32Array(count * 3);
+  const sizes = new Float32Array(count);
+  const pc = new THREE.Color(0x7a1fff), gc = new THREE.Color(0xd4af37), wc = new THREE.Color(0xffffff);
+  for (let i = 0; i < count; i++) {
+    pos[i*3] = (Math.random() - 0.5) * 28;
+    pos[i*3+1] = (Math.random() - 0.5) * 18;
+    pos[i*3+2] = (Math.random() - 0.5) * 20 - 3;
+    const c = Math.random() < 0.5 ? wc : Math.random() < 0.6 ? pc : gc;
+    col[i*3] = c.r; col[i*3+1] = c.g; col[i*3+2] = c.b;
+    sizes[i] = 0.003 + Math.random() * 0.02;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+  const mat = new THREE.PointsMaterial({
+    size: 0.04, vertexColors: true, transparent: true, opacity: 0.4,
+    blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true,
+  });
+  return new THREE.Points(geo, mat);
+}
+const particles = makeParticles(3000);
+scene.add(particles);
+
+// === GOLD RIBBONS ===
+const ribbonGroup = new THREE.Group();
+scene.add(ribbonGroup);
+function makeRibbon() {
+  const pts = [
+    [0,-0.8,0],[0.5,-0.3,0.3],[0.8,0.2,0.5],[0.5,0.8,0.3],[0,1.2,0],
+    [-0.5,0.8,-0.3],[-0.8,0.2,-0.5],[-0.5,-0.3,-0.3],[0,-0.8,0]
+  ].map(p => new THREE.Vector3(p[0], p[1], p[2]));
+  const curve = new THREE.CatmullRomCurve3(pts);
+  const mat = new THREE.MeshPhysicalMaterial({
+    color: 0xd4af37, emissive: 0xd4af37, emissiveIntensity: 0.3,
+    metalness: 0.8, roughness: 0.15, transparent: true, opacity: 0,
+    clearcoat: 0.2,
+  });
+  return new THREE.Mesh(new THREE.TubeGeometry(curve, 48, 0.015, 6, false), mat);
+}
+for (let i = 0; i < 3; i++) {
+  const r = makeRibbon();
+  r.rotation.y = (i / 3) * Math.PI * 2;
+  ribbonGroup.add(r);
+}
+
+// === CLUSTER BALLOONS ===
+const clusterGroup = new THREE.Group();
+scene.add(clusterGroup);
+const cPositions = [[-1.4,1.0,0.5],[1.4,0.9,-0.3],[-1.0,-0.8,0.7],[1.0,-0.7,-0.5],[0,1.6,-0.2]];
+const cColors = [0xd4af37,0x9b59b6,0x8e44ad,0xd4af37,0x7a1fff];
+cPositions.forEach((pos, i) => {
+  const m = new THREE.Mesh(bGeo.clone(), new THREE.MeshPhysicalMaterial({
+    color: cColors[i], metalness: 0.1, roughness: 0.15,
+    transparent: true, opacity: 0, clearcoat: 0.5, envMapIntensity: 1.0,
+  }));
+  m.position.set(pos[0], pos[1], pos[2]);
+  m.scale.set(0.01, 0.01, 0.01);
+  clusterGroup.add(m);
+});
+
+// === DECORATIVE LIGHTS ===
+const decoGroup = new THREE.Group();
+scene.add(decoGroup);
+for (let i = 0; i < 30; i++) {
+  const a = (i / 30) * Math.PI * 2;
+  const r = 2.0 + Math.random() * 0.8;
+  const h = (Math.random() - 0.5) * 3.0;
+  const m = new THREE.Mesh(
+    new THREE.SphereGeometry(0.025, 6, 6),
+    new THREE.MeshBasicMaterial({ color: 0xd4af37, transparent: true, opacity: 0, blending: THREE.AdditiveBlending })
+  );
+  m.position.set(Math.sin(a)*r, h, Math.cos(a)*r);
+  m.userData = { speed: 0.3 + Math.random()*0.7, offset: Math.random()*6, baseY: h };
+  decoGroup.add(m);
+}
+
+// === VOLUMETRIC LIGHT RAYS ===
+const rayGroup = new THREE.Group();
+scene.add(rayGroup);
+for (let i = 0; i < 10; i++) {
+  const a = (i / 10) * Math.PI * 2;
+  const m = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.004, 0.035, 4, 6, 1, true),
+    new THREE.MeshBasicMaterial({
+      color: 0xd4af37, transparent: true, opacity: 0,
+      blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide,
+    })
+  );
+  m.position.set(Math.sin(a)*1.8, -0.3, Math.cos(a)*1.8);
+  m.rotation.x = Math.PI / 2 - 0.3;
+  m.rotation.z = a;
+  rayGroup.add(m);
+}
+
+// === FLORAL ACCENTS ===
+const floralGroup = new THREE.Group();
+scene.add(floralGroup);
+[
+  [-1.8,0.6,1.2],[1.8,-0.5,-1.0],[-1.4,-1.0,1.3],[1.5,1.0,-1.2],[0,-0.6,1.6]
+].forEach(pos => {
+  const m = new THREE.Mesh(
+    new THREE.SphereGeometry(0.04, 6, 6),
+    new THREE.MeshPhysicalMaterial({
+      color: 0xd4af37, emissive: 0xd4af37, emissiveIntensity: 0.3,
+      metalness: 0.4, roughness: 0.3, transparent: true, opacity: 0,
+    })
+  );
+  m.position.set(pos[0], pos[1], pos[2]);
+  floralGroup.add(m);
+});
+
+// === SCROLL TRACKING ===
+const ST = window.ScrollTrigger;
+let progress = 0;
+if (ST) {
+  ST.create({
+    trigger: '#hero', start: 'top top', end: '+=100%',
+    scrub: 1.5, pin: true, pinSpacing: true,
+    onUpdate: (self) => { progress = self.progress; },
+  });
+}
+
+// === MOUSE ===
+let mx = 0, my = 0, tx = 0, ty = 0;
+document.addEventListener('mousemove', (e) => {
+  tx = (e.clientX / window.innerWidth - 0.5) * 2;
+  ty = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+// === RESIZE ===
+window.addEventListener('resize', () => {
+  const w = window.innerWidth, h = window.innerHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+  composer.setSize(w, h);
+});
+
+// === HOVER GLOW ===
+let hoverActive = false;
+canvas.addEventListener('mouseenter', () => { hoverActive = true; });
+canvas.addEventListener('mouseleave', () => { hoverActive = false; });
+
+// === ANIMATION LOOP ===
+const clock = new THREE.Clock();
+const pPositions = particles.geometry.attributes.position.array;
+const pCount = pPositions.length / 3;
+
+function animate() {
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+  const p = Math.min(Math.max(progress, 0), 1);
+
+  // Smooth mouse
+  mx += (tx - mx) * 0.05;
+  my += (ty - my) * 0.05;
+
+  // Hover
+  const hoverIntensity = hoverActive ? 1 + Math.sin(t * 2) * 0.1 : 0;
+
+  // Phase calculations
+  const ph0 = Math.min(1, p / 0.2);
+  const ph1 = Math.max(0, Math.min(1, (p - 0.2) / 0.2));
+  const ph2 = Math.max(0, Math.min(1, (p - 0.4) / 0.2));
+  const ph3 = Math.max(0, Math.min(1, (p - 0.6) / 0.2));
+  const ph4 = Math.max(0, Math.min(1, (p - 0.8) / 0.2));
+
+  // Camera
+  const cz = 7 - p * 2.5 + ph4 * 1.2;
+  const cy = ph2 * 1.2 - ph4 * 0.4;
+  const cRot = ph1 * 0.5 - ph4 * 0.2;
+  camera.position.x = Math.sin(cRot) * 2.5 + mx * 0.35;
+  camera.position.y = cy - my * 0.3;
+  camera.position.z = cz;
+  camera.lookAt(0, 0.15 + ph2 * 0.4, 0);
+
+  // Balloon rotation
+  const br = p * 0.4 + mx * 0.1;
+  balloonGroup.rotation.y = br;
+  balloon.rotation.x = Math.sin(t * 0.4) * 0.02;
+  innerBalloon.rotation.x = balloon.rotation.x;
+  goldEdges.rotation.x = balloon.rotation.x;
+
+  // Balloon morph (phase2+)
+  const ms = 1 + ph2 * 0.1 + ph3 * 0.08;
+  balloon.scale.set(ms, ms + ph2 * 0.15, ms);
+  const innerMs = 0.72 * ms;
+  innerBalloon.scale.set(innerMs, innerMs + ph2 * 0.11, innerMs);
+
+  // Energy pulsing
+  const pulse = 1 + Math.sin(t * 1.5) * 0.04;
+  const eI = (0.5 + ph0 * 1.0 + hoverIntensity * 0.3) * (0.8 + Math.sin(t * 1.5) * 0.2);
+  innerBalloon.material.emissiveIntensity = eI;
+  innerBalloon.material.opacity = 0.25 + ph0 * 0.25;
+
+  // Glass
+  glassMat.opacity = 0.25 + ph0 * 0.2 + ph2 * 0.1;
+  glassMat.transmission = 0.5 + ph0 * 0.2;
+
+  // Gold edges
+  goldEdges.material.opacity = 0.15 + eI * 0.12 + hoverIntensity * 0.1;
+
+  // Typography
+  typography.material.opacity = 0.15 + p * 0.55;
+  typography.position.z = -4.5 - p * 1.0;
+  typography.rotation.x = Math.sin(t * 0.05 + p * 2) * 0.008;
+  typography.rotation.y = Math.sin(t * 0.03 + p) * 0.015;
+
+  // Fog
+  scene.fog.density = 0.015 + p * 0.035;
+
+  // Ribbons
+  ribbonGroup.children.forEach(r => {
+    r.material.opacity = ph1 * 0.6;
+    const s = 0.2 + ph1 * 0.8;
+    r.scale.set(s, s, s);
+    r.rotation.y += 0.003;
+  });
+
+  // Cluster balloons
+  clusterGroup.children.forEach((m, i) => {
+    m.material.opacity = ph2 * 0.6;
+    const s = 0.01 + ph2 * 0.45;
+    m.scale.set(s, s, s);
+    const float = Math.sin(t * 0.6 + i * 1.3) * 0.03 * ph2;
+    m.position.y += (cPositions[i][1] + float - m.position.y) * 0.02;
+  });
+
+  // Decorative lights
+  decoGroup.children.forEach(l => {
+    l.material.opacity = ph3 * 0.6 + hoverIntensity * 0.2;
+    const { speed, offset, baseY } = l.userData;
+    l.position.y = baseY + Math.sin(t * speed + offset) * 0.08;
+    const s = 1 + Math.sin(t * speed * 1.5 + offset) * 0.3;
+    l.scale.setScalar(s);
+  });
+
+  // Light rays
+  rayGroup.children.forEach(r => {
+    r.material.opacity = ph3 * 0.2 + ph4 * 0.1;
+    r.rotation.z += 0.004;
+  });
+
+  // Floral accents
+  floralGroup.children.forEach(a => {
+    a.material.opacity = ph3 * 0.45;
+  });
+
+  // Particles - upward drift increases with scroll
+  for (let i = 0; i < pCount; i++) {
+    const idx = i * 3;
+    pPositions[idx + 1] += Math.sin(t * 0.15 + i * 0.003) * 0.00015 + ph4 * 0.0004;
+    pPositions[idx] += Math.cos(t * 0.1 + i * 0.003) * 0.00008;
+    // Wrap around
+    if (pPositions[idx + 1] > 9) pPositions[idx + 1] = -9;
+    if (pPositions[idx] > 14) pPositions[idx] = -14;
+    if (pPositions[idx] < -14) pPositions[idx] = 14;
+  }
+  particles.geometry.attributes.position.needsUpdate = true;
+  particles.material.opacity = 0.25 + p * 0.45;
+
+  // Bloom strength - subtle shift
+  bloomPass.strength = 0.3 + p * 0.3 + hoverIntensity * 0.1;
+
+  composer.render();
+}
+</script>
+</body>
+</html>
