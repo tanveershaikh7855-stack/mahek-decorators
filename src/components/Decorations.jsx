@@ -69,11 +69,7 @@ function ProductCard({ item, index }) {
     >
       {/* Image with glass overlay */}
       <div className="relative aspect-[16/10] overflow-hidden bg-[#151515]">
-        <div className="absolute inset-0 flex items-center justify-center text-[rgba(255,255,255,0.08)] text-xs">
-          <svg className="w-14 h-14 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={0.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-        </div>
+        <img src={item.img} alt={item.title} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
         {/* Glass overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-[rgba(11,11,11,0.6)] via-transparent to-[rgba(11,11,11,0.2)] group-hover:from-[rgba(11,11,11,0.4)] transition-all duration-500" />
         <div className="absolute inset-0 bg-[rgba(255,255,255,0.02)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
