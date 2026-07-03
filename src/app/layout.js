@@ -1,13 +1,14 @@
 import './globals.css'
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
+
 export const metadata = {
   title: 'MAHEK DECORATOR — Premium Balloon Decorations, Pune',
   description: 'Premium balloon decoration services across Pune and 160+ KM surrounding areas. Transform every celebration into a memory with MAHEK DECORATOR.',
   keywords: 'balloon decoration, balloon decorators, pune decoration, party decoration, wedding decoration, event decoration, luxury balloons',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-  },
   openGraph: {
     title: 'MAHEK DECORATOR — Premium Balloon Decorations',
     description: 'Premium balloon decoration services across Pune and 160+ KM surrounding areas.',
