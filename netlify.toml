@@ -1,21 +1,15 @@
 [build]
   command = "npm run build"
-  functions = "backend"
-  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
 
 [dev]
   command = "npm run dev:all"
   port = 3000
-
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/server/:splat"
-  status = 200
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
 
 [context.production]
   environment = {NEXT_PUBLIC_API_URL = "https://mahek-decorator.netlify.app/api"}
