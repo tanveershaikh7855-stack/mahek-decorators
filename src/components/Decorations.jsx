@@ -1,174 +1,453 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import CONFIG, { whatsappUrl } from '@/lib/config'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { whatsappUrl } from '@/lib/config'
 
-const products = [
+const negotiateMessage = `Hello Mahek Decorator,
+
+I am interested in:
+
+Package:
+Budget:
+Location:
+Date:
+
+Can we negotiate the pricing?`
+
+const packages = [
   {
-    title: 'Luxury Black & Gold Balloon Setup',
+    category: 'Luxury Birthday Backdrop',
+    image: '/images/product-1.jpg',
+    title: 'Luxury Black & Gold Birthday Setup',
+    description:
+      'Premium black and gold balloon backdrop with metallic chrome accents, luxury stage styling, and event photography setup.',
     price: '₹5,000 – ₹50,000',
-    tag: 'Premium',
-    img: '/images/product-1.jpg',
-    tags: ['Balloon Arch', 'Luxury Setup', 'Event Backdrop'],
-    desc: 'Premium luxury balloon setup for birthdays, anniversaries, and events.',
+    features: ['Premium balloons', 'Metallic decor', 'Stage setup', 'LED lighting', 'Custom backdrop'],
+    addOns: ['Name lettering', 'Cake plinths', 'Number lights', 'Chrome balloon upgrade'],
+    duration: '3-5 hours event display',
+    setupTime: '2-4 hours before event',
+    height: 'lg:min-h-[690px]',
   },
   {
-    title: 'Outdoor Balloon Entrance Decoration',
+    category: 'Outdoor Entrance Decoration',
+    image: '/images/product-2.jpg',
+    title: 'Grand Entrance Balloon Experience',
+    description: 'Luxury outdoor entrance decoration designed for weddings, receptions, and premium events.',
     price: '₹50,000 – ₹80,000',
-    tag: 'Grand',
-    img: '/images/product-2.jpg',
-    tags: ['Entrance Decoration', 'Outdoor Event', 'Premium Walkway'],
-    desc: 'Luxury entrance balloon decoration for weddings and grand events.',
+    features: ['Entrance tunnel', 'Balloon pathway', 'Hanging balloons', 'Outdoor setup', 'Event styling'],
+    addOns: ['Floral runners', 'Welcome signage', 'Pathway lights', 'Guest photo zone'],
+    duration: 'Full event coverage',
+    setupTime: '5-7 hours before event',
+    height: 'lg:min-h-[610px]',
   },
   {
-    title: 'Birthday Balloon Ring Decoration',
+    category: 'Birthday Circle Arch',
+    image: '/images/product-3.jpg',
+    title: 'Elegant Birthday Balloon Ring',
+    description: 'Minimal luxury birthday decoration featuring neutral tones and premium styling.',
     price: '₹5,000 – ₹10,000',
-    tag: 'Popular',
-    img: '/images/product-3.jpg',
-    tags: ['Birthday', 'Balloon Ring', 'Celebration'],
-    desc: 'Elegant circular balloon setup for birthdays and celebrations.',
+    features: ['Circular arch', 'Premium balloons', 'Neon signage', 'Photography corner'],
+    addOns: ['Theme props', 'Acrylic board', 'Cake table styling', 'Floor balloons'],
+    duration: '3-4 hours event display',
+    setupTime: '90-150 minutes before event',
+    height: 'lg:min-h-[560px]',
   },
   {
-    title: 'Corporate Event Decoration',
+    category: 'Corporate Event Decoration',
+    image: '/images/product-4.jpg',
+    title: 'Corporate Celebration Experience',
+    description: 'Premium corporate event backdrop and balloon styling for conferences and celebrations.',
     price: '₹45,000 – ₹50,000',
-    tag: 'Corporate',
-    img: '/images/product-4.jpg',
-    tags: ['Corporate', 'Annual Event', 'Premium Stage'],
-    desc: 'Professional corporate balloon event setup with brand integration.',
+    features: ['Corporate branding', 'Stage setup', 'Balloon walls', 'Event styling'],
+    addOns: ['Logo placement', 'Welcome gate', 'Podium styling', 'Media backdrop'],
+    duration: 'Half-day to full-day event',
+    setupTime: '4-6 hours before event',
+    height: 'lg:min-h-[650px]',
   },
   {
-    title: 'Baby Shower Decoration',
+    category: 'Baby Welcome Decoration',
+    image: '/images/product-5.jpg',
+    title: 'Luxury Welcome Baby Setup',
+    description: 'Elegant baby welcome celebration setup with pastel luxury balloon styling.',
     price: '₹10,000 – ₹20,000',
-    tag: 'Celebration',
-    img: '/images/product-5.jpg',
-    tags: ['Baby Shower', 'Welcome Baby', 'Family Event'],
-    desc: 'Premium baby shower decoration setup with pastel themes.',
+    features: ['Balloon arch', 'Custom name board', 'Baby theme styling', 'Photography setup'],
+    addOns: ['Cradle styling', 'Soft toy props', 'Pastel florals', 'Family photo corner'],
+    duration: '3-5 hours event display',
+    setupTime: '2-3 hours before event',
+    height: 'lg:min-h-[600px]',
   },
   {
-    title: 'Romantic Room Decoration',
+    category: 'Romantic Room Decoration',
+    image: '/images/product-6.jpg',
+    title: 'Romantic Surprise Experience',
+    description: 'Premium romantic room decoration with balloons, flowers, candles, and lighting.',
     price: '₹10,000 – ₹11,000',
-    tag: 'Romantic',
-    img: '/images/product-6.jpg',
-    tags: ['Couple', 'Romantic', 'Room Decoration'],
-    desc: 'Luxury romantic surprise room decoration with candle-lit ambiance.',
+    features: ['Ceiling balloons', 'Rose petals', 'LED candles', 'Romantic setup'],
+    addOns: ['Photo memories', 'Fairy lights', 'Flower bouquet', 'Private dinner styling'],
+    duration: 'Same evening experience',
+    setupTime: '90-120 minutes before arrival',
+    height: 'lg:min-h-[540px]',
   },
 ]
 
-function ProductCard({ item, index }) {
-  const cardRef = useRef(null)
-  const isInView = useInView(cardRef, { once: true, margin: '-40px' })
+function packageMessage(item, intent = 'book') {
+  const action = intent === 'negotiate' ? 'Can we negotiate the pricing?' : 'Please share booking details.'
+
+  return `Hello Mahek Decorator,
+
+I am interested in:
+
+Package: ${item.title}
+Budget: ${item.price}
+Location:
+Date:
+
+${action}`
+}
+
+function MagneticLink({ href, children, className, ariaLabel }) {
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const springX = useSpring(x, { stiffness: 260, damping: 18 })
+  const springY = useSpring(y, { stiffness: 260, damping: 18 })
 
   return (
-    <motion.div
-      ref={cardRef}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-      className="group rounded-3xl overflow-hidden bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[rgba(212,175,55,0.2)] transition-all duration-500"
+    <motion.a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={ariaLabel}
+      style={{ x: springX, y: springY }}
+      onMouseMove={(event) => {
+        const rect = event.currentTarget.getBoundingClientRect()
+        x.set((event.clientX - rect.left - rect.width / 2) * 0.16)
+        y.set((event.clientY - rect.top - rect.height / 2) * 0.2)
+      }}
+      onMouseLeave={() => {
+        x.set(0)
+        y.set(0)
+      }}
+      className={className}
     >
-      {/* Image with glass overlay */}
-      <div className="relative aspect-[16/10] overflow-hidden bg-[#151515]">
-        <img src={item.img} alt={item.title} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-        {/* Glass overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[rgba(11,11,11,0.6)] via-transparent to-[rgba(11,11,11,0.2)] group-hover:from-[rgba(11,11,11,0.4)] transition-all duration-500" />
-        <div className="absolute inset-0 bg-[rgba(255,255,255,0.02)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      {children}
+    </motion.a>
+  )
+}
 
-        {/* Tag */}
-        <div className="absolute top-4 left-4 px-3 py-1 rounded-full glass text-[10px] text-[#d4af37] tracking-[0.1em] uppercase font-medium border-[rgba(212,175,55,0.2)] z-[2]">
-          {item.tag}
+function PackageCard({ item, index, onOpen }) {
+  const pointerX = useMotionValue(0.5)
+  const pointerY = useMotionValue(0.5)
+  const rotateX = useTransform(pointerY, [0, 1], [2.5, -2.5])
+  const rotateY = useTransform(pointerX, [0, 1], [-2.5, 2.5])
+
+  return (
+    <motion.article
+      layout
+      data-package-card
+      initial={{ opacity: 0, y: 42, scale: 0.97, filter: 'blur(18px)' }}
+      className={`group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.045] shadow-[0_24px_90px_rgba(0,0,0,0.34)] backdrop-blur-2xl transition-[border-color,box-shadow,background] duration-500 hover:border-[#d4af37]/45 hover:bg-white/[0.065] hover:shadow-[0_34px_110px_rgba(0,0,0,0.48)] ${item.height}`}
+      style={{ rotateX, rotateY, transformPerspective: 1200 }}
+      onMouseMove={(event) => {
+        const rect = event.currentTarget.getBoundingClientRect()
+        pointerX.set((event.clientX - rect.left) / rect.width)
+        pointerY.set((event.clientY - rect.top) / rect.height)
+      }}
+      onMouseLeave={() => {
+        pointerX.set(0.5)
+        pointerY.set(0.5)
+      }}
+    >
+      <button
+        type="button"
+        onClick={() => onOpen(item)}
+        className="block w-full text-left"
+        aria-label={`View details for ${item.title}`}
+      >
+        <div className="relative aspect-[4/3] overflow-hidden bg-[#15120d] sm:aspect-[16/11]">
+          <Image
+            src={item.image}
+            alt={`${item.category} by Mahek Decorator`}
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            priority={index < 2}
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0b09] via-[#0d0b09]/20 to-transparent" />
+          <div className="absolute left-4 top-4 rounded-full border border-[#d4af37]/20 bg-[#0d0b09]/45 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-[#e5c760] backdrop-blur-xl">
+            {item.category}
+          </div>
         </div>
-        <div className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-[rgba(212,175,55,0.12)] backdrop-blur-[12px] text-[#d4af37] text-xs font-semibold border border-[rgba(212,175,55,0.15)] z-[2]">
-          {item.price}
-        </div>
-      </div>
 
-      {/* Content */}
-      <div className="p-6 sm:p-7">
-        <h3 className="font-display text-lg sm:text-xl font-semibold text-white mb-2 leading-snug">
-          {item.title}
-        </h3>
-        <p className="text-sm text-[rgba(255,255,255,0.45)] mb-4 leading-relaxed">{item.desc}</p>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-5">
-          {item.tags.map((t) => (
-            <span key={t} className="px-3 py-1 rounded-full bg-[rgba(255,255,255,0.04)] text-[11px] text-[rgba(255,255,255,0.5)] border border-[rgba(255,255,255,0.06)]">
-              {t}
+        <div className="p-5 sm:p-6 lg:p-7">
+          <div className="mb-4 flex items-start justify-between gap-4">
+            <h3 className="font-display text-[1.35rem] font-medium leading-tight tracking-[-0.02em] text-white sm:text-2xl">
+              {item.title}
+            </h3>
+            <span className="shrink-0 rounded-full border border-[#d4af37]/20 bg-[#d4af37]/10 px-3 py-1.5 text-xs font-semibold text-[#e6c75a]">
+              {item.price}
             </span>
-          ))}
-        </div>
+          </div>
+          <p className="min-h-[72px] text-sm leading-6 text-white/58">{item.description}</p>
 
-        {/* Negotiable */}
-        <div className="flex items-center gap-2 mb-5 py-2.5 px-3.5 rounded-xl bg-[rgba(212,175,55,0.06)] border border-[rgba(212,175,55,0.1)]">
-          <svg className="w-3.5 h-3.5 text-[#d4af37] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-          </svg>
-          <span className="text-xs text-[#d4af37] font-medium">Price Negotiable</span>
+          <div className="mt-5 grid gap-2">
+            {item.features.map((feature) => (
+              <div key={feature} className="flex items-center gap-2 text-sm text-white/72">
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-[#d4af37]/12 text-[11px] text-[#e7cb69]">
+                  ✓
+                </span>
+                <span>{feature}</span>
+              </div>
+            ))}
+          </div>
         </div>
+      </button>
 
-        {/* Actions */}
-        <div className="flex gap-3">
-          <a
-            href={whatsappUrl(`Hello Mahek Decorator, I am interested in:\n\nDecoration: ${item.title}\nBudget: ${item.price}\n\nCan we discuss the details?`)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 px-5 py-2.5 rounded-full btn-gold text-xs text-center no-underline inline-flex items-center justify-center gap-1.5 group/btn"
+      <div className="px-5 pb-5 sm:px-6 sm:pb-6 lg:px-7 lg:pb-7">
+        <div className="flex flex-col gap-3 min-[420px]:flex-row">
+          <MagneticLink
+            href={whatsappUrl(encodeURIComponent(packageMessage(item)))}
+            ariaLabel={`Book ${item.title} on WhatsApp`}
+            className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full bg-[#e0bd55] px-5 text-sm font-semibold text-[#12100b] no-underline shadow-[0_14px_36px_rgba(212,175,55,0.18)] transition duration-300 hover:bg-[#f1d474] focus:outline-none focus:ring-2 focus:ring-[#e0bd55] focus:ring-offset-2 focus:ring-offset-[#0d0b09]"
           >
-            <svg className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:scale-110" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-            </svg>
             Book Now
-          </a>
-          <a
-            href={whatsappUrl(`Hello Mahek Decorator, I want to negotiate the price for ${item.title} (${item.price}).`)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-5 py-2.5 rounded-full btn-outline text-xs no-underline inline-flex items-center gap-1.5 group/neg"
+          </MagneticLink>
+          <MagneticLink
+            href={whatsappUrl(encodeURIComponent(packageMessage(item, 'negotiate')))}
+            ariaLabel={`Negotiate price for ${item.title} on WhatsApp`}
+            className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full border border-white/14 bg-white/[0.03] px-5 text-sm font-semibold text-white no-underline transition duration-300 hover:border-[#d4af37]/45 hover:text-[#efd470] focus:outline-none focus:ring-2 focus:ring-[#e0bd55] focus:ring-offset-2 focus:ring-offset-[#0d0b09]"
           >
-            <svg className="w-3.5 h-3.5 transition-all duration-300 group-hover/neg:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Bargain On WhatsApp
-          </a>
+            Negotiate Price
+          </MagneticLink>
         </div>
       </div>
-    </motion.div>
+    </motion.article>
+  )
+}
+
+function PackageModal({ item, onClose }) {
+  useEffect(() => {
+    if (!item) return
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') onClose()
+    }
+
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKeyDown)
+
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [item, onClose])
+
+  if (!item) return null
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-[80] grid place-items-center bg-[#070604]/80 p-4 backdrop-blur-xl"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="package-modal-title"
+        onMouseDown={(event) => {
+          if (event.target === event.currentTarget) onClose()
+        }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 28, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 18, scale: 0.98 }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-[30px] border border-white/12 bg-[#11100d]/95 shadow-[0_40px_140px_rgba(0,0,0,0.65)]"
+          data-lenis-prevent
+        >
+          <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="relative min-h-[340px] overflow-hidden rounded-t-[30px] bg-[#18140d] lg:rounded-l-[30px] lg:rounded-tr-none">
+              <Image src={item.image} alt={item.title} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#11100d] via-transparent to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 grid grid-cols-3 gap-2">
+                {[item.image, item.image, item.image].map((image, index) => (
+                  <div key={`${image}-${index}`} className="relative aspect-[5/3] overflow-hidden rounded-2xl border border-white/15 bg-white/10">
+                    <Image src={image} alt="" fill sizes="160px" className="object-cover" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-6 sm:p-8">
+              <div className="mb-5 flex items-start justify-between gap-4">
+                <div>
+                  <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-[#d4af37]">{item.category}</p>
+                  <h3 id="package-modal-title" className="font-display text-3xl font-medium leading-tight tracking-[-0.03em] text-white sm:text-4xl">
+                    {item.title}
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  aria-label="Close package details"
+                  className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/12 bg-white/[0.04] text-xl leading-none text-white/80 transition hover:border-[#d4af37]/40 hover:text-[#f0d672] focus:outline-none focus:ring-2 focus:ring-[#e0bd55]"
+                >
+                  ×
+                </button>
+              </div>
+
+              <p className="text-sm leading-7 text-white/62">{item.description}</p>
+
+              <div className="my-6 rounded-3xl border border-[#d4af37]/18 bg-[#d4af37]/10 p-5">
+                <span className="text-xs uppercase tracking-[0.18em] text-[#d4af37]">Price range</span>
+                <p className="mt-2 font-display text-3xl font-medium text-white">{item.price}</p>
+              </div>
+
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <h4 className="mb-3 text-sm font-semibold text-white">Inclusions</h4>
+                  <div className="space-y-2">
+                    {item.features.map((feature) => (
+                      <p key={feature} className="text-sm text-white/62">✓ {feature}</p>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <h4 className="mb-3 text-sm font-semibold text-white">Add-ons</h4>
+                  <div className="space-y-2">
+                    {item.addOns.map((addOn) => (
+                      <p key={addOn} className="text-sm text-white/62">✓ {addOn}</p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 grid gap-3 rounded-3xl border border-white/10 bg-white/[0.035] p-5 text-sm text-white/64 sm:grid-cols-2">
+                <p><span className="block text-white">Event duration</span>{item.duration}</p>
+                <p><span className="block text-white">Setup time</span>{item.setupTime}</p>
+              </div>
+
+              <div className="mt-6 flex flex-col gap-3 min-[420px]:flex-row">
+                <MagneticLink
+                  href={whatsappUrl(encodeURIComponent(packageMessage(item)))}
+                  ariaLabel={`Book ${item.title} on WhatsApp`}
+                  className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full bg-[#e0bd55] px-6 text-sm font-semibold text-[#12100b] no-underline transition hover:bg-[#f1d474] focus:outline-none focus:ring-2 focus:ring-[#e0bd55]"
+                >
+                  Book Now
+                </MagneticLink>
+                <MagneticLink
+                  href={whatsappUrl(encodeURIComponent(packageMessage(item, 'negotiate')))}
+                  ariaLabel={`Negotiate ${item.title} on WhatsApp`}
+                  className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full border border-white/14 bg-white/[0.03] px-6 text-sm font-semibold text-white no-underline transition hover:border-[#d4af37]/45 hover:text-[#efd470] focus:outline-none focus:ring-2 focus:ring-[#e0bd55]"
+                >
+                  WhatsApp
+                </MagneticLink>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   )
 }
 
 export default function Decorations() {
+  const sectionRef = useRef(null)
+  const [selectedPackage, setSelectedPackage] = useState(null)
+
+  useLayoutEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
+
+    const context = gsap.context(() => {
+      gsap.from('[data-packages-title]', {
+        autoAlpha: 0,
+        y: 28,
+        filter: 'blur(14px)',
+        duration: 1.2,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: '[data-packages-title]',
+          start: 'top 82%',
+          once: true,
+        },
+      })
+
+      gsap.to('[data-package-card]', {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        filter: 'blur(0px)',
+        duration: 1.2,
+        ease: 'power4.out',
+        stagger: 0.12,
+        scrollTrigger: {
+          trigger: '[data-packages-grid]',
+          start: 'top 78%',
+          once: true,
+        },
+      })
+
+      gsap.to('[data-parallax-packages]', {
+        yPercent: 11,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.6,
+        },
+      })
+    }, sectionRef)
+
+    return () => context.revert()
+  }, [])
+
   return (
-    <section id="decorations" className="relative py-28 sm:py-36 bg-[#0b0b0b] overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(139,92,246,0.03),transparent_60%)]" />
+    <section id="decorations" ref={sectionRef} className="relative isolate overflow-hidden bg-[#0d0b09] py-20 sm:py-28 lg:py-36">
+      <div data-parallax-packages className="pointer-events-none absolute inset-x-0 top-0 h-[580px] bg-[radial-gradient(circle_at_22%_12%,rgba(212,175,55,0.13),transparent_34%),radial-gradient(circle_at_86%_4%,rgba(255,255,255,0.08),transparent_28%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:80px_80px] opacity-20" />
 
-      <div className="relative z-10 max-w-[1280px] mx-auto px-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-16"
-        >
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-[#d4af37] tracking-[0.15em] uppercase mb-5 font-medium border-[rgba(212,175,55,0.15)]">
-            Our Portfolio
-          </span>
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-[-0.03em] text-white mb-4">
-            Our <span className="gold-gradient">Decorations</span>
+      <div className="relative z-10 mx-auto max-w-[1440px] px-5 sm:px-8">
+        <div data-packages-title className="mx-auto mb-12 max-w-4xl text-center sm:mb-16 lg:mb-20">
+          <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-[#d4af37]">MAHEK DECORATOR</p>
+          <h2 className="font-display text-[2.7rem] font-medium leading-[0.95] tracking-[-0.045em] text-white sm:text-6xl lg:text-7xl">
+            Featured Celebration Experiences
           </h2>
-          <p className="text-[rgba(255,255,255,0.5)] text-base max-w-[500px] mx-auto">
-            Premium balloon artistry for every occasion. Each design crafted to perfection.
+          <p className="mx-auto mt-6 max-w-xl text-base leading-7 text-white/56 sm:text-lg">
+            Crafted celebrations for every occasion.
           </p>
-        </motion.div>
+        </div>
 
-        {/* 2-column grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {products.map((item, i) => (
-            <ProductCard key={item.title} item={item} index={i} />
+        <div data-packages-grid className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          {packages.map((item, index) => (
+            <PackageCard key={item.title} item={item} index={index} onOpen={setSelectedPackage} />
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="mx-auto mt-12 max-w-2xl rounded-[28px] border border-white/10 bg-white/[0.045] p-6 text-center shadow-[0_24px_90px_rgba(0,0,0,0.32)] backdrop-blur-2xl sm:p-8"
+        >
+          <p className="font-display text-2xl font-medium tracking-[-0.02em] text-white">Want a customized package?</p>
+          <p className="mt-2 text-sm text-white/58">Let&apos;s discuss your budget.</p>
+          <MagneticLink
+            href={whatsappUrl(encodeURIComponent(negotiateMessage))}
+            ariaLabel="Negotiate a custom package on WhatsApp"
+            className="mt-6 inline-flex min-h-12 items-center justify-center rounded-full bg-[#e0bd55] px-7 text-sm font-semibold text-[#12100b] no-underline shadow-[0_14px_36px_rgba(212,175,55,0.18)] transition duration-300 hover:bg-[#f1d474] focus:outline-none focus:ring-2 focus:ring-[#e0bd55] focus:ring-offset-2 focus:ring-offset-[#0d0b09]"
+          >
+            Negotiate On WhatsApp
+          </MagneticLink>
+        </motion.div>
       </div>
+
+      <PackageModal item={selectedPackage} onClose={() => setSelectedPackage(null)} />
     </section>
   )
 }
